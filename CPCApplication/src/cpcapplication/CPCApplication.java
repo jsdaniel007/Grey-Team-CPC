@@ -106,15 +106,15 @@ public class CPCApplication extends Application {
         VBox botRightPanVBox = 
             new VBox(30, xDivider, botRightPanHBox, pastedCodeField, saveBox, compareButton2);
         
-        /*
+        
         //Insert Handlers Here
-        browseButton1.setOnAction(new EventHandler<ActionEvent>()) {
-            @Override public void handle() {
+        browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                browseButton1.setText("Clicked");
                 File file = file1Chooser.showOpenDialog(primaryStage);
             }
+        });
         
-        }
-        */
         
         //Constraints for the left and right columns
         ColumnConstraints leftColumn = new ColumnConstraints();
