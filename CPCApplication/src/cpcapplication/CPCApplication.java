@@ -145,7 +145,7 @@ public class CPCApplication extends Application {
         
         //Bottom Left Panel of the Program
         Label botLeftPanLabel = new Label("Plagiarism Checker");
-        Image Logo = new Image("Logo.PNG");
+        //Image Logo = new Image("/Logo.PNG");
         HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
         VBox botLeftPanVBox = new VBox(30, xDivider, botLeftPanHBox);
         
