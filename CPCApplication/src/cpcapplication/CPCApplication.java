@@ -15,8 +15,11 @@ import java.awt.*;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.geometry.Insets;
+import javafx.scene.image.Image;
 import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
@@ -40,6 +43,10 @@ public class CPCApplication extends Application {
     //start of the Program from a GUI perspective
     @Override
     public void start(Stage primaryStage) {
+        //Allow access to your other classes
+        CodeComparison CC = new CodeComparison();
+        CompareToLib CTL = new CompareToLib();
+        Database DB = new Database();
         
         //Create a Gridpane to add panels to, for setting up the page.
         GridPane gridPane = new GridPane();
@@ -67,23 +74,45 @@ public class CPCApplication extends Application {
         Button browseButton1 = new Button("Browse...");
         Button browseButton2 = new Button("Browse...");
         CheckBox saveBox = new CheckBox("Save to the Database");
+            saveBox.setIndeterminate(false);
         TextField pastedCodeField = new TextField();
         
         //FileChooser Setup and Options
         //File 1 Chooser
         FileChooser file1Chooser = new FileChooser();
             file1Chooser.setTitle("Select File 1");
+            file1Chooser.getExtensionFilters().addAll(
+                new ExtensionFilter("Text Files", "*.txt"),
+                new ExtensionFilter("Java Files", ".java"),
+                new ExtensionFilter("All Files", "*.*"));
         
         FileChooser file2Chooser = new FileChooser();
             file2Chooser.setTitle("Select File 2");
+            file2Chooser.getExtensionFilters().addAll(
+                new ExtensionFilter("Text Files", "*.txt"),
+                new ExtensionFilter("Java Files", ".java"),
+                new ExtensionFilter("All Files", "*.*"));
         
+            
         //create 4 panels with its label and HBoxes & VBoxes for the layout in the GridLayout
         //Top Left Panel of the Program
         Label topLeftPanLabel = new Label("Choose File 1 Below to Upload");
         HBox topLeftPanHBox = new HBox(30, topLeftPanLabel);
-        //File Chooser should go here
         VBox topLeftPanVBox = 
-            new VBox(30, xDivider, topLeftPanHBox, browseButton1, saveBox);
+            new VBox(30);
+        ObservableList topLeftList = topLeftPanVBox.getChildren();
+        topLeftList.addAll(xDivider, topLeftPanHBox, browseButton1, saveBox);
+        //Top Left Panel Handlers
+        browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                //have the file chooser appear, then have the filename
+                File file1Selection = file1Chooser.showOpenDialog(primaryStage);
+                String file1name = file1Selection.getName();
+                if (file1name != null) {
+                    browseButton1.setText(file1name);
+                }
+            }
+        });
         
         
         //Top Right Panel of the Program
@@ -93,11 +122,33 @@ public class CPCApplication extends Application {
         Button compareButton1 = new Button("Compare File 1 to File 2");
         VBox topRightPanVBox = 
             new VBox(30, xDivider, topRightPanHBox, browseButton2, saveBox, compareButton1);
+        //Top Right Panel Handlers
+        browseButton2.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                File file2Selection = file1Chooser.showOpenDialog(primaryStage);
+                String file1name = file2Selection.getName();
+                if (file1name != null) {
+                    browseButton1.setText(file1name);
+                }
+            }
+        });
+        
+        compareButton1.setOnAction(new EventHandler<ActionEvent>( ) {
+           @Override public void handle(ActionEvent e) {
+               /*
+               Call the compare function and pass it the file1 and file2 from the
+               file choosers and have the comparison class run its course
+               */
+               //CC.Compare();
+           } 
+        });
         
         //Bottom Left Panel of the Program
         Label botLeftPanLabel = new Label("Plagiarism Checker");
+        Image Logo = new Image("Logo.PNG");
         HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
         VBox botLeftPanVBox = new VBox(30, xDivider, botLeftPanHBox);
+        
         
         //Bottom Right Panel of the Program
         Label botRightPanLabel = new Label("Paste Code Below for File 1 Comparison");
@@ -108,12 +159,7 @@ public class CPCApplication extends Application {
         
         
         //Insert Handlers Here
-        browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
-            @Override public void handle(ActionEvent e) {
-                browseButton1.setText("Clicked");
-                File file = file1Chooser.showOpenDialog(primaryStage);
-            }
-        });
+        
         
         
         //Constraints for the left and right columns
