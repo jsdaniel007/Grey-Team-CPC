@@ -55,7 +55,7 @@ public class CPCApplication extends Application {
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         gridPane2.setPadding(new Insets(10, 10, 10, 10));
         //gridPane.setGridLinesVisible(true);
-        gridPane2.setGridLinesVisible(true);
+        //gridPane2.setGridLinesVisible(true);
         
     //FORMATTING- Use for padding out and dividing up the page
         Label xDivider = new Label("==========================");
@@ -84,7 +84,6 @@ public class CPCApplication extends Application {
         TextField pastedCodeField = new TextField();
         
     //FileChooser Setup and Options
-    //File 1 Chooser
         FileChooser file1Chooser = new FileChooser();
             file1Chooser.setTitle("Select File 1");
             file1Chooser.getExtensionFilters().addAll(
@@ -108,8 +107,7 @@ public class CPCApplication extends Application {
         HBox SaveCheckHBox = new HBox(saveBox);
         VBox topLeftPanVBox = 
             new VBox(30, topLeftPanHBox, BrowseButtonHBox, SaveCheckHBox);
-        
-        //Top Left Panel Handlers
+    //Top Left Panel Handlers
         browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //have the file chooser appear, then have the filename
@@ -127,8 +125,7 @@ public class CPCApplication extends Application {
         HBox topRightPanHBox = new HBox(30, topRightPanLabel);
         Button compareButton1 = new Button("Compare File 1 to File 2");
         VBox topRightPanVBox = 
-            new VBox(30, xDivider, topRightPanHBox, browseButton2, saveBox, compareButton1);
-        
+            new VBox(30, xDivider, topRightPanHBox, browseButton2, saveBox, compareButton1);   
     //Top Right Panel Handlers
         browseButton2.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
@@ -139,7 +136,6 @@ public class CPCApplication extends Application {
                 }
             }
         });
-        
         compareButton1.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override public void handle(ActionEvent e) {
                /*
@@ -152,7 +148,7 @@ public class CPCApplication extends Application {
         
         
     //Bottom Left Panel of the Program
-    //Problem: LogoView will not show
+        //Problem: LogoView will not show
         Label botLeftPanLabel = new Label("Plagiarism Checker");
         Image Logo = new Image("file:Logo.PNG");
             ImageView LogoView = new ImageView();
@@ -172,9 +168,55 @@ public class CPCApplication extends Application {
         VBox botRightPanVBox = 
             new VBox(30, xDivider, botRightPanHBox, pastedCodeField, saveBox, compareButton2);
         
+    //Adding the elements to the gridPane sections
+        gridPane.add(topLeftPanVBox, 0, 0);
+        gridPane.add(topRightPanVBox, 1, 0);
+        gridPane.add(botLeftPanVBox, 0, 1);
+        gridPane.add(botRightPanVBox, 1, 1);
         
-    //Insert Handlers Here
+    /*
+        RESULTS SCREEN GUI CODE
+    */
+        FileChooser file3Chooser = new FileChooser();
+            file3Chooser.setTitle("Select File");
+            file3Chooser.getExtensionFilters().addAll(
+                new ExtensionFilter("Text Files", "*.txt"),
+                new ExtensionFilter("Java Files", ".java"),
+                new ExtensionFilter("All Files", "*.*"));
+            
+    //Left Column Setup
+        Label LeftColLabel = new Label("Choose File to Compare Below");
+        Button browseButton3 = new Button("Browse...");
+        Label LeftColLabel2 = new Label("Choose Database Interaction: ");
+        Button File1DatabaseButton = new Button("Compare To The Database");
+        Button AddToDatabase = new Button("Add To The Database");
+        Button RemToDatabase = new Button("Remove From The Database");
+        VBox LeftColVBox = new VBox(30, LeftColLabel, browseButton3, LeftColLabel2,
+                File1DatabaseButton, AddToDatabase, RemToDatabase);
         
+    //Left Column Handlers
+        browseButton3.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                File file3Selection = file3Chooser.showOpenDialog(primaryStage);
+                String file1name = file3Selection.getName();
+                if (file1name != null) {
+                    browseButton3.setText(file1name);
+                }
+            }
+        });
+        
+        
+    //Right Column Setup
+        Label RightColLabel = new Label("Paste Text Below for Database Comparison");
+        Button PastedCompareButton = new Button("Compare Paste Contents to Database");
+        Button AddPastedButton = new Button("Add Paste Contents to Database");
+        VBox RightColVBox = new VBox(30, RightColLabel, pastedCodeField, LeftColLabel2, 
+                PastedCompareButton, AddPastedButton);
+        
+        
+    //adding elements to the Gridpane
+        gridPane2.add(LeftColVBox, 0,0);
+        gridPane2.add(RightColVBox, 1,0);
         
     //Constraints for the left and right columns
         ColumnConstraints leftColumn = new ColumnConstraints();
@@ -193,33 +235,26 @@ public class CPCApplication extends Application {
         gridPane2.getColumnConstraints().addAll(leftColumn, rightColumn);
         //gridPane.getRowConstraints().addAll(firstRow, secondRow);
         
-        gridPane.add(topLeftPanVBox, 0, 0);
-        gridPane.add(topRightPanVBox, 1, 0);
-        gridPane.add(botLeftPanVBox, 0, 1);
-        gridPane.add(botRightPanVBox, 1, 1);
         
-        gridPane2.add();
-        gridPane2.add();
-        
-        //SCENES: Scene Handling
+    //SCENES: Scene Handling
         Scene Compscene = new Scene(CompTitleVBox, 600, 600);
         Scene DataScene = new Scene(DataTitleVBox, 600, 600);
         
     //DataPageButton Handler 
-    DataPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
-            @Override public void handle(ActionEvent e) {
+        DataPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
+                @Override public void handle(ActionEvent e) {
 
-                primaryStage.setScene(DataScene);
-                primaryStage.show();
-            }
-        });
+                    primaryStage.setScene(DataScene);
+                    primaryStage.show();
+                }
+            });
     //ComparisonPageButton Handler
-    ComparisonPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
-            @Override public void handle(ActionEvent e) {   
-                primaryStage.setScene(Compscene);
-                primaryStage.show();
-            }
-        }); 
+        ComparisonPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
+                @Override public void handle(ActionEvent e) {   
+                    primaryStage.setScene(Compscene);
+                    primaryStage.show();
+                }
+            }); 
         
         primaryStage.setTitle("CPC Application");
         primaryStage.setScene(Compscene);
@@ -227,9 +262,15 @@ public class CPCApplication extends Application {
     }
     
     //Class for the second screen of the program
+    /*
     public class DatabaseScreen extends Application {
         
     }
+    
+    public class ResultScreen extends Application {
+        
+    }
+    */
     
     
     /**
