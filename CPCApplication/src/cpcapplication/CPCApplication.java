@@ -34,7 +34,6 @@ import javafx.stage.Stage;
  * @author jsdan
  */
 public class CPCApplication extends Application {
-    
     private Label CompareTitleLabel;
     
     //start of the Program from a GUI perspective
@@ -229,10 +228,7 @@ public class CPCApplication extends Application {
     
     //Class for the second screen of the program
     public class DatabaseScreen extends Application {
-        @Override
-        public void start(Stage secondaryStage) {
         
-        }
     }
     
     
