@@ -64,11 +64,14 @@ public class CPCApplication extends Application {
         
     //FORMATTING- Use for padding out and dividing up the page
         Label xDivider = new Label("==========================");
+        Label xDivider2 = new Label("==========================");
+        Label xDivider3 = new Label("==========================");
+        Label xDivider4 = new Label("==========================");
         
     //TITLE- Create the title labels for the screens
         Label ComparisonTitle = new Label("Comparisons");
         Label DatabaseTitle = new Label("Database");
-    //Create the Navigation Buttons-- HANDLE NEEDED
+    //Create the Navigation Buttons
         Button DataPageButton = new Button("Go To Database Page");
         Button ComparisonPageButton = new Button("Go To Comparisons Page");
     //Create a Hbox and for the ComparisonTitle
@@ -81,16 +84,33 @@ public class CPCApplication extends Application {
         DataTitleVBox.setAlignment(Pos.TOP_CENTER);
         
         
-    //REUSABLE- Create reusable elements for the GUI throughout the Program
+    //REUSABLE GUI ELEMENTS
         Button browseButton1 = new Button("Browse...");
         Button browseButton2 = new Button("Browse...");
         CheckBox saveBox = new CheckBox("Save to the Database");
             saveBox.setVisible(true);
+        CheckBox saveBox2 = new CheckBox("Save to the Database");
+            saveBox2.setVisible(true);
+        CheckBox saveBox3 = new CheckBox("Save to the Database");
+            saveBox2.setVisible(true);
+        
+        //TEXTAREA CREATION
         TextArea pastedCodeField = new TextArea();
             pastedCodeField.setWrapText(true);
             pastedCodeField.setPrefHeight(100);
             pastedCodeField.setPrefColumnCount(2);
             pastedCodeField.setPrefWidth(100);
+        TextArea pastedCodeField2 = new TextArea();
+            pastedCodeField2.setWrapText(true);
+            pastedCodeField2.setPrefHeight(100);
+            pastedCodeField2.setPrefColumnCount(2);
+            pastedCodeField2.setPrefWidth(100);
+        TextArea pastedCodeField3 = new TextArea();
+            pastedCodeField3.setWrapText(true);
+            pastedCodeField3.setPrefHeight(100);
+            pastedCodeField3.setPrefColumnCount(2);
+            pastedCodeField3.setPrefWidth(100);
+            
     //FileChooser Setup and Options
         FileChooser file1Chooser = new FileChooser();
             file1Chooser.setTitle("Select File 1");
@@ -108,14 +128,14 @@ public class CPCApplication extends Application {
         
             
     //create 4 panels with its label and HBoxes & VBoxes for the layout in the GridLayout
-    //Top Left Panel of the Program
+    //TOP LEFT PANEL ELEMENTS
         Label topLeftPanLabel = new Label("Choose File 1 Below to Upload");
         HBox topLeftPanHBox = new HBox(topLeftPanLabel);
         HBox BrowseButtonHBox = new HBox(browseButton1);
         HBox SaveCheckHBox = new HBox(saveBox);
         VBox topLeftPanVBox = 
-            new VBox(30, topLeftPanHBox, BrowseButtonHBox, SaveCheckHBox);
-    //Top Left Panel Handlers
+            new VBox(30, xDivider, topLeftPanHBox, BrowseButtonHBox, SaveCheckHBox);
+    //TOP LEFT PANEL HANDLERS
         browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //have the file chooser appear, then have the filename
@@ -128,13 +148,13 @@ public class CPCApplication extends Application {
         });
         
         
-    //Top Right Panel of the Program
+    //TOP RIGHT PANEL ELEMENTS
         Label topRightPanLabel = new Label("Choose File 2 Below to Upload");
         HBox topRightPanHBox = new HBox(30, topRightPanLabel);
         Button compareButton1 = new Button("Compare File 1 to File 2");
         VBox topRightPanVBox = 
-            new VBox(30, xDivider, topRightPanHBox, browseButton2, saveBox, compareButton1);   
-    //Top Right Panel Handlers
+            new VBox(30, xDivider2, topRightPanHBox, browseButton2, saveBox2, compareButton1);   
+    //TOP RIGHT PANEL HANDLERS
         browseButton2.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 File file2Selection = file1Chooser.showOpenDialog(primaryStage);
@@ -155,7 +175,7 @@ public class CPCApplication extends Application {
         });
         
         
-    //Bottom Left Panel of the Program
+    //BOTTOM LEFT PANEL OF THE PROGRAM
         //Problem: LogoView will not show
         Label botLeftPanLabel = new Label("Plagiarism Checker");
         Image Logo = new Image("file:Logo.PNG");
@@ -166,16 +186,24 @@ public class CPCApplication extends Application {
             LogoView.setSmooth(true);
             LogoView.setCache(true);
         HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
-        VBox botLeftPanVBox = new VBox(30, xDivider, botLeftPanHBox, LogoView);
+        VBox botLeftPanVBox = new VBox(30, xDivider3, botLeftPanHBox, LogoView);
         
         
-    //Bottom Right Panel of the Program
+    //BOTTOM RIGHT PANEL OF THE PROGRAM
         Label botRightPanLabel = new Label("Paste Code Below for File 1 Comparison");
         Button compareButton2 = new Button("Compare File 1 to Pasted Code");
         HBox botRightPanHBox = new HBox(30, botRightPanLabel);
         VBox botRightPanVBox = 
-            new VBox(30, xDivider, botRightPanHBox, pastedCodeField, saveBox, compareButton2);
+            new VBox(30, xDivider4, botRightPanHBox, pastedCodeField2, saveBox3, compareButton2);
+    //BOTTOM RIGHT PANEL HANDLERS
+        compareButton2.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                //Run to the comparison function
+            }
+        });
+        //Insert pastedCodeField2 Handler here
         
+        //Insert saveBox3 Handler here
     //Adding the elements to the gridPane sections-- SCREEN 1
         gridPane.add(topLeftPanVBox, 0, 0);
         gridPane.add(topRightPanVBox, 1, 0);
@@ -192,7 +220,7 @@ public class CPCApplication extends Application {
                 new ExtensionFilter("Java Files", ".java"),
                 new ExtensionFilter("All Files", "*.*"));
             
-    //Left Column Setup
+    //LEFT COLUMN SETUP
         Label LeftColLabel = new Label("Choose File to Compare Below");
         Button browseButton3 = new Button("Browse...");
         Label LeftColLabel2 = new Label("Choose Database Interaction: ");
@@ -202,7 +230,7 @@ public class CPCApplication extends Application {
         VBox LeftColVBox = new VBox(30, LeftColLabel, browseButton3, LeftColLabel2,
                 File1DatabaseButton, AddToDatabase, RemToDatabase);
         
-    //Left Column Handlers
+    //LEFT COLUMN HANDLERS
         browseButton3.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 File file3Selection = file3Chooser.showOpenDialog(primaryStage);
@@ -214,7 +242,7 @@ public class CPCApplication extends Application {
         });
         
         
-    //Right Column Setup
+    //RIGHT COLUMN ELEMENTS
         Label RightColLabel = new Label("Paste Text Below for Database Comparison");
         Button PastedCompareButton = new Button("Compare Paste Contents to Database");
         Button AddPastedButton = new Button("Add Paste Contents to Database");
@@ -245,7 +273,7 @@ public class CPCApplication extends Application {
         
     /*
         RESULT SCREEN GUI CODE
-        Problem: Titles and Labels not centeringn correctly
+        Problem: Titles and Labels not centering correctly
     */
     Label ResultTitle = new Label("Results");
         ResultTitle.setAlignment(Pos.CENTER);
@@ -297,12 +325,15 @@ public class CPCApplication extends Application {
         Scene Compscene = new Scene(CompTitleVBox, 600, 600);
         Scene DataScene = new Scene(DataTitleVBox, 600, 600);
         Scene ResultScene = new Scene(ResultScreen, 600, 600);
+    
+    //ComparisonResultButton Handlers
+        
         
     //DataPageButton Handler 
         DataPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
                     //DEBUG ONLY
-                    primaryStage.setScene(ResultScene);
+                    primaryStage.setScene(DataScene);
                     primaryStage.show();
                 }
             });
