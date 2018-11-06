@@ -29,6 +29,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.control.ContentDisplay;
 
 /**
  *
@@ -244,11 +245,15 @@ public class CPCApplication extends Application {
         
     /*
         RESULT SCREEN GUI CODE
+        Problem: Titles and Labels not centeringn correctly
     */
     Label ResultTitle = new Label("Results");
+        ResultTitle.setAlignment(Pos.CENTER);
     Label rCodeTitle = new Label("Raw Code Comparison"); 
+        rCodeTitle.setAlignment(Pos.CENTER);
     GridPane resultPaneA = new GridPane(); //Will hold the TextArea's for the Raw Code Comparison
     Label cStyleTitle = new Label("Code Style Comparison");
+        cStyleTitle.setAlignment(Pos.CENTER);
     GridPane resultPaneB = new GridPane();//Will hold the TextArea's for the Code Style Comparison
     GridPane resultPaneC = new GridPane();
     
