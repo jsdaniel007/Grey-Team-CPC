@@ -82,7 +82,10 @@ public class CPCApplication extends Application {
         CheckBox saveBox = new CheckBox("Save to the Database");
             saveBox.setVisible(true);
         TextField pastedCodeField = new TextField();
-        
+        pastedCodeField.setPrefHeight(100);
+        pastedCodeField.setAlignment(Pos.TOP_LEFT);
+        pastedCodeField.setPrefColumnCount(2);
+        pastedCodeField.setPrefWidth(100);
     //FileChooser Setup and Options
         FileChooser file1Chooser = new FileChooser();
             file1Chooser.setTitle("Select File 1");
