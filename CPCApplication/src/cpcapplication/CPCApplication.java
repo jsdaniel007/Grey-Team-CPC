@@ -18,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -44,6 +45,9 @@ public class CPCApplication extends Application {
         CompareToLib CTL = new CompareToLib();
         Database DB = new Database();
         
+    /*
+        SCREEN 2 GUI CODE
+    */  
     //Create a Gridpane to add panels to, for setting up the page.
         GridPane gridPane = new GridPane();
         GridPane gridPane2 = new GridPane();
@@ -81,11 +85,11 @@ public class CPCApplication extends Application {
         Button browseButton2 = new Button("Browse...");
         CheckBox saveBox = new CheckBox("Save to the Database");
             saveBox.setVisible(true);
-        TextField pastedCodeField = new TextField();
-        pastedCodeField.setPrefHeight(100);
-        pastedCodeField.setAlignment(Pos.TOP_LEFT);
-        pastedCodeField.setPrefColumnCount(2);
-        pastedCodeField.setPrefWidth(100);
+        TextArea pastedCodeField = new TextArea();
+            pastedCodeField.setWrapText(true);
+            pastedCodeField.setPrefHeight(100);
+            pastedCodeField.setPrefColumnCount(2);
+            pastedCodeField.setPrefWidth(100);
     //FileChooser Setup and Options
         FileChooser file1Chooser = new FileChooser();
             file1Chooser.setTitle("Select File 1");
@@ -171,14 +175,14 @@ public class CPCApplication extends Application {
         VBox botRightPanVBox = 
             new VBox(30, xDivider, botRightPanHBox, pastedCodeField, saveBox, compareButton2);
         
-    //Adding the elements to the gridPane sections
+    //Adding the elements to the gridPane sections-- SCREEN 1
         gridPane.add(topLeftPanVBox, 0, 0);
         gridPane.add(topRightPanVBox, 1, 0);
         gridPane.add(botLeftPanVBox, 0, 1);
         gridPane.add(botRightPanVBox, 1, 1);
         
     /*
-        RESULTS SCREEN GUI CODE
+        SCREEN 2 GUI CODE
     */
         FileChooser file3Chooser = new FileChooser();
             file3Chooser.setTitle("Select File");
@@ -238,16 +242,62 @@ public class CPCApplication extends Application {
         gridPane2.getColumnConstraints().addAll(leftColumn, rightColumn);
         //gridPane.getRowConstraints().addAll(firstRow, secondRow);
         
+    /*
+        RESULT SCREEN GUI CODE
+    */
+    Label ResultTitle = new Label("Results");
+    Label rCodeTitle = new Label("Raw Code Comparison"); 
+    GridPane resultPaneA = new GridPane(); //Will hold the TextArea's for the Raw Code Comparison
+    Label cStyleTitle = new Label("Code Style Comparison");
+    GridPane resultPaneB = new GridPane();//Will hold the TextArea's for the Code Style Comparison
+    GridPane resultPaneC = new GridPane();
+    
+    //Adding to the Gridpanes and formatting
+    resultPaneA.getColumnConstraints().addAll(leftColumn, rightColumn);
+    resultPaneB.getColumnConstraints().addAll(leftColumn, rightColumn);
+    resultPaneC.getColumnConstraints().addAll(leftColumn, rightColumn);
+    
+    TextArea file1CodeBoxA = new TextArea();
+        file1CodeBoxA.setWrapText(true);
+        file1CodeBoxA.setPrefHeight(100);
+        file1CodeBoxA.setPrefColumnCount(2);
+        file1CodeBoxA.setPrefWidth(100);
+    TextArea comparisonFileCodeBoxA = new TextArea();
+        comparisonFileCodeBoxA.setWrapText(true);
+        comparisonFileCodeBoxA.setPrefHeight(100);
+        comparisonFileCodeBoxA.setPrefColumnCount(2);
+        comparisonFileCodeBoxA.setPrefWidth(100);
+    TextArea file1CodeBoxB = new TextArea();
+        file1CodeBoxA.setWrapText(true);
+        file1CodeBoxA.setPrefHeight(100);
+        file1CodeBoxA.setPrefColumnCount(2);
+        file1CodeBoxA.setPrefWidth(100);
+    TextArea comparisonFileCodeBoxB = new TextArea();
+        comparisonFileCodeBoxA.setWrapText(true);
+        comparisonFileCodeBoxA.setPrefHeight(100);
+        comparisonFileCodeBoxA.setPrefColumnCount(2);
+        comparisonFileCodeBoxA.setPrefWidth(100);
+    
+    //NOTE: resultPaneB may need its own handlers, meaning new textArea's
+    resultPaneA.add(file1CodeBoxA, 0, 0);
+    resultPaneA.add(comparisonFileCodeBoxA, 1, 0);
+    resultPaneB.add(file1CodeBoxB, 0, 0);
+    resultPaneB.add(comparisonFileCodeBoxB, 1, 0);
+    
+    //Everything will be loaded into the VBox, even the footer
+    VBox ResultScreen = new VBox(30, ResultTitle, rCodeTitle, resultPaneA, 
+            cStyleTitle, resultPaneB, resultPaneC);
         
     //SCENES: Scene Handling
         Scene Compscene = new Scene(CompTitleVBox, 600, 600);
         Scene DataScene = new Scene(DataTitleVBox, 600, 600);
+        Scene ResultScene = new Scene(ResultScreen, 600, 600);
         
     //DataPageButton Handler 
         DataPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
-
-                    primaryStage.setScene(DataScene);
+                    //DEBUG ONLY
+                    primaryStage.setScene(ResultScene);
                     primaryStage.show();
                 }
             });
