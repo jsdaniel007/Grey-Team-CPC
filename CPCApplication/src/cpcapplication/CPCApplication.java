@@ -169,7 +169,7 @@ public class CPCApplication extends Application {
         });
         compareButton1.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override public void handle(ActionEvent e) {
-               //CC.Compare(file1name, file2name);
+               CodeComparison.Stage1(file1Selection, file2Selection);
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
@@ -207,7 +207,7 @@ public class CPCApplication extends Application {
         compareButton2.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override public void handle(ActionEvent e) {
                //PROBLEM: textArea.txt will run into issues when trying to save
-               //CC.Compare(file1name, textArea.txt);
+               //CC.Stage1(file1name, textArea.txt);
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
