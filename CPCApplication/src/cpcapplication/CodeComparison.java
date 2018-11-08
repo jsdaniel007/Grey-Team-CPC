@@ -10,7 +10,7 @@ package cpcapplication;
  * @author jsdan
  * @author cbell
  */
-
+  
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import java.util.*;
 
 public class CodeComparison {
     
-    public static void Stage1(File f1, File f2) {
+    public static int Stage1(File f1, File f2) {
         try (BufferedReader lineParser1 = new BufferedReader(new 
             FileReader(f1));
             BufferedReader lineParser2 = new BufferedReader(new 
@@ -68,9 +68,13 @@ public class CodeComparison {
                 areEqual = true;
             }
             
+            lineParser1.close(); //Tie up loose ends.
+            lineParser2.close();
+            
             System.out.println(" ");
             if(areEqual){
                 System.out.println("The compared files are identical.");
+                return percentageMatch; //Return the percentageMatch
             } else {
                 percentageMatch = (linesInCommon/lesserAmmount)*100;
                 System.out.println("The two files are not the same but have " + 
@@ -83,17 +87,18 @@ public class CodeComparison {
                         lesserAmmount + " lines have been coppied from " + 
                         lesserFile + " (not counting blank lines) giving a Match"
                         + " Percentage of " + percentageMatch + "." ); // This is the basis for how we find our percentage. We take the lesser amount from above and we put the amount of matched lines over it. 
-            
+                return percentageMatch; //Return the percentageMatch
+                
                 // Code that moves us on to Stage 2 for a more finite matching system. 
                 // Will be working on this like we talked about as more time arrises. 
                 // What we have so far is the Minimum Viable Product.  
             }
-            lineParser1.close();
-            lineParser2.close();
         }
         catch(IOException e){
             System.out.println(e);
         }
+        
+        return 0;
     }
     
     public static void Stage2(String line1, String line2) {
