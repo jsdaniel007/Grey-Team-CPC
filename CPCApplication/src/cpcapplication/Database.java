@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.*;
 
 
-public class  database {
+public class  Database {
       public static void main(String[] args){
       DBCheck();
     }
