@@ -38,7 +38,7 @@ public class  database {
     }
     
     
-    public static void addToDatabase(Path file){//****WIP****//
+    public static void addAFile(Path file){//****WIP****//
             //Path dest = C:\\Users\\Public\\database;
     //Files.copy(file, "C:\\Users\\Public\\database",REPLACE_EXISTING);
      //copy(file, "C:\\Users\\Public\\database") 
