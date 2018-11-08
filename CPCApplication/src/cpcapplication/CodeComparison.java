@@ -99,7 +99,8 @@ public class CodeComparison {
     public static int Stage2(File f1, File f2, int percentageMatch) {
         try (BufferedReader parser1 = new BufferedReader(new FileReader(f1));
             BufferedReader parser2 = new BufferedReader(new FileReader(f2)) ){
-
+            
+            // A funpit full of integers for percentages later.
             int F1forCount = 0;
             int F1ifCount = 0;
             int F1whileCount = 0;
@@ -113,11 +114,11 @@ public class CodeComparison {
             String currentLine = null; // Creates the current line to constantly rewrite it in a sec.
             while((currentLine = parser1.readLine()) != null){ // As long as the file still has something in it...
                 StringTokenizer st = new StringTokenizer(currentLine, " ");
-                F1size = st.countTokens(); // gets total number of tokens of the line
+                F1size += st.countTokens(); // Gets total number of tokens of the line.
                 for (int i = 0; i < F1size; i++){
-                    String word = st.nextToken();// gets the first word
+                    String word = st.nextToken(); // Gets the next word.
                     if (word.equals("for")){
-                        F1forCount++; //increase count by 1 // Keeps track for percentages later. 
+                        F1forCount++; // Increase count by 1 // Keeps track for percentages later. 
                     } else if (word.equals("if")){
                         F1ifCount++;
                     } else if (word.equals("while")){
@@ -129,11 +130,11 @@ public class CodeComparison {
             
             while( (currentLine = parser2.readLine()) != null ){ // As long as the file still has something in it...
                 StringTokenizer st = new StringTokenizer(currentLine, " ");
-                F2size = st.countTokens(); // gets total number of tokens of the line
+                F2size += st.countTokens(); 
                 for (int i = 0; i < F2size; i++){
-                    String word = st.nextToken();// gets the first word
+                    String word = st.nextToken();
                     if (word.equals("for")){
-                        F2forCount++; //increase count by 1 // Keeps track for percentages later. 
+                        F2forCount++; 
                     } else if (word.equals("if")){
                         F2ifCount++;
                     } else if (word.equals("while")){
@@ -143,6 +144,7 @@ public class CodeComparison {
             }
             parser2.close();
             
+            // A funpit full of integers for percentages.
             int F1forUsage = F1forCount/F1size;
             int F1ifUsage = F1ifCount/F1size;
             int F1whileUsage = F1whileCount/F1size;
@@ -150,6 +152,7 @@ public class CodeComparison {
             int F2ifUsage = F2ifCount/F2size;
             int F2whileUsage = F2whileCount/F2size;
             
+            // If the percentages match from F1 to F2, add some match percentage.
             if (F1forUsage == F2forUsage){
                 addedPercentage += 5;
             }
@@ -160,8 +163,10 @@ public class CodeComparison {
                 addedPercentage += 5;
             }
             
+            // However much addedPercentage needs to be added in.
             percentageMatch += addedPercentage;
             
+            // Go home.
             return percentageMatch; 
         }
         catch(IOException e){
