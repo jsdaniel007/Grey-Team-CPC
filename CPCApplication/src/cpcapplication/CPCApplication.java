@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.FileInputStream; 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
@@ -56,7 +58,7 @@ public class CPCApplication extends Application {
     
     //start of the Program from a GUI perspective
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
     //Allow access to your other classes
         CodeComparison CC = new CodeComparison();
         Database DB = new Database();
@@ -266,13 +268,15 @@ public class CPCApplication extends Application {
     //BOTTOM LEFT PANEL OF THE PROGRAM
         //Problem: LogoView will not show
         Label botLeftPanLabel = new Label("Plagiarism Checker");
-        Image Logo = new Image("file:Logo.PNG");
-            ImageView LogoView = new ImageView();
+        //FileInputStream inputstream = new FileInputStream("file:CPCApplication\\src\\cpcapplication\\Logo.png");
+        Image Logo = new Image("file:/CPCApplication/src/cpcapplication/Logo.PNG");
+            ImageView LogoView = new ImageView(Logo);
             LogoView.setImage(Logo);
             LogoView.setFitWidth(100);
-            LogoView.setPreserveRatio(true);
-            LogoView.setSmooth(true);
-            LogoView.setCache(true);
+            LogoView.setFitHeight(100);
+            //LogoView.setPreserveRatio(true);
+            //LogoView.setSmooth(true);
+            //LogoView.setCache(true);
         HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
         VBox botLeftPanVBox = new VBox(20, xDivider3, botLeftPanHBox, LogoView);
         
