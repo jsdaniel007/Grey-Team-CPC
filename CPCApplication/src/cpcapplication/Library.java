@@ -10,20 +10,29 @@ package cpcapplication;
  * 
  */
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import static java.nio.file.StandardCopyOption.*;
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
 
-
 public class  Library {
-      public static void main(String[] args){
-         File test = new File("C:\\Users\\kyle addy\\Desktop\\test.txt");
-         
-         addAFile(test);
+      public static void main(String[] args) throws IOException{
+          
+          String username = System.getProperty("user.name");
+         // String please = ("C:\\Users\\"+ username +"\\Desktop\\test.txt");
+          // Path test = new Paths.get("C:\\Users\\"+ username +"\\Desktop\\test.txt");
+          Path please = Paths.get("C:\\Users\\"+ username +"\\Desktop\\test.txt");
+
+          File src = please.toFile();
+          boolean exist = src.exists();
+          System.out.println(exist);
+          //File dest=new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
+          
+            //File dest = new File("Library Path: C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
+         //addAFile(test);
+         //fileCopy(test,dest);
+         //copydir(src,dest);
     }
    
     Library() {//contructor
@@ -48,17 +57,110 @@ public class  Library {
     }
     
     
-    public static void addAFile(File file){//****WIP****//
-        String username = System.getProperty("user.name");
+    private static void addAFile(File src) throws FileNotFoundException, IOException {
         
-       Path src = file.toPath();
-       Path dest = Paths.get("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
-       
-       try{
-       Files.copy(src, dest, REPLACE_EXISTING);
-       } catch (IOException e)
-       {
-           System.out.println("Failed to Copy file");
-       }
-    }
+        String username = System.getProperty("user.name");
+          
+            File dest = new File("Library Path: C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
+
+//            if(!srcdir.exists()){
+//                System.out.println("Directory not found");
+//            }
+//            else{
+//                Library fileDemo = new Library();
+//                fileDemo.copydir(srcdir, destdir);
+//                System.out.println("Coppied success");
+//            }
+             InputStream in = null;
+            OutputStream out = null; 
+            
+            try
+            {
+                in = new FileInputStream(src);
+                out = new FileOutputStream(dest);
+                
+                byte[] buffer = new byte[1024];
+                
+                int length; 
+                while ((length = in.read(buffer)) > 0 )
+                {
+                    out.write(buffer,0, length);
+                }
+            }
+            finally
+            {
+                if (in != null)
+                {
+                    in.close();
+                }
+                if(out != null)
+                {
+                    out.close();
+                }
+            }
+            System.out.println("File copied from " + src + "to " + dest);           
+        }
+    
+     public static void copydir(File src, File dest) throws IOException
+        {
+//            if(src.isDirectory())
+//            {
+//                if(!dest.exists())
+//                {
+//                    dest.mkdir();
+//                    System.out.print("Directory copied from " + src + "to " + dest);
+//                }
+//                String files[] = src.list();
+//                
+//                for (String fileName : files)
+//                {
+//                    File srcFile = new File(src, fileName);
+//                    File destFile = new File(dest, fileName);
+//                    copydir(srcFile, destFile);
+//                   
+//                }
+//            }
+//            else{
+                fileCopy(src, dest);
+            //}
+          }
+     
+        private static void fileCopy(File src, File dest)
+                throws FileNotFoundException, IOException
+                
+        {
+            InputStream in = null;
+            OutputStream out = null; 
+            
+            try
+            {
+                in = new FileInputStream(src);
+                out = new FileOutputStream(dest);
+                
+                byte[] buffer = new byte[1024];
+                
+                int length; 
+                while ((length = in.read(buffer)) > 0 )
+                {
+                    out.write(buffer,0, length);
+                }
+            }
+            finally
+            {
+                if (in != null)
+                {
+                    in.close();
+                }
+                if(out != null)
+                {
+                    out.close();
+                }
+            }
+            System.out.println("File copied from " + src + "to " + dest);
+        }
 }
+    
+    
+    
+
+
