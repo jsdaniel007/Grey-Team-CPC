@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import static java.nio.file.StandardCopyOption.*;
 
 
+
 public class  Database {
       public static void main(String[] args){
       DBCheck();
@@ -37,11 +38,8 @@ public class  Database {
         System.out.println("The file does exist");
         }
     }
-    
-    
-    public static void addAFile(Path file){//****WIP****//
-            //Path dest = C:\\Users\\Public\\database;
-    //Files.copy(file, "C:\\Users\\Public\\database",REPLACE_EXISTING);
-     //copy(file, "C:\\Users\\Public\\database") 
-    }
 }
+    
+    
+ //  public static void addAFile(Path file){
+//}
