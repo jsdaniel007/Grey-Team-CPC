@@ -36,6 +36,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.ContentDisplay;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -61,7 +63,7 @@ public class CPCApplication extends Application {
     public void start(Stage primaryStage) throws FileNotFoundException {
     //Allow access to your other classes
         CodeComparison CC = new CodeComparison();
-        Database DB = new Database();
+        Library LIB = new Library();
         
     /*
         SCREEN 1 GUI CODE
@@ -205,9 +207,10 @@ public class CPCApplication extends Application {
         FileChooser file2Chooser = new FileChooser();
             file2Chooser.setTitle("Select File 2");
             file2Chooser.getExtensionFilters().addAll(
+                new ExtensionFilter("All Files", "*.*"),
                 new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Java Files", ".java"),
-                new ExtensionFilter("All Files", "*.*"));
+                new ExtensionFilter("Java Files", ".java")
+                );
         
             
     //TOP LEFT PANEL ELEMENTS
@@ -252,10 +255,19 @@ public class CPCApplication extends Application {
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
-                   //DB.addAFile(file1Selection);
+                   //Used Netbeans Hint system, complained otherwise
+                   try {
+                       LIB.addAFile(file1Selection);
+                   } catch (IOException ex) {
+                       Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                   }
                }
                if (saveBox2.isSelected() == true) {
-                   //DB.addAFile(file2Selection);
+                   try {
+                       LIB.addAFile(file2Selection);
+                   } catch (IOException ex) {
+                       Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                   }
                }
                
                primaryStage.setScene(ResultScene);
@@ -292,14 +304,23 @@ public class CPCApplication extends Application {
            @Override public void handle(ActionEvent e) {
                //Stage1 needs a second parameter, that being the pastedCodeField2
                //and needs the contents passed as type File.
-               //CC.Stage1(file1Selection, );
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
-                   //DB.addAFile(file1Selection);
+                   try {
+                       LIB.addAFile(file1Selection);
+                   } catch (IOException ex) {
+                       Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                   }
                }
                if (saveBox3.isSelected() == true) {
-                   //DB.addAFile();
+                   try {
+                       
+                       LIB.addAFile(TextAreaGet(pastedCodeField2));
+                   } catch (IOException ex) {
+                       Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+                   
                }
                
                primaryStage.setScene(ResultScene);
@@ -355,8 +376,12 @@ public class CPCApplication extends Application {
         */
         AddToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
-                //make it so that redundant files are detected
-                //DB.addAFile(file3Selection);
+                try {
+                    //make it so that redundant files are detected?
+                    LIB.addAFile(file3Selection);
+                } catch (IOException ex) {
+                    Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         RemToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
@@ -406,24 +431,14 @@ public class CPCApplication extends Application {
     }
     
     //HELPER METHOD FOR TEXT AREA 
-        public void fileWriter(TextArea textArea) {
-        try {
-            ObservableList<CharSequence> paragraph = textArea.getParagraphs();
-            Iterator<CharSequence>  iter = paragraph.iterator();
-            BufferedWriter bf = new BufferedWriter(new FileWriter(new File("textArea.txt")));
-            while(iter.hasNext())
-            {
-                CharSequence seq = iter.next();
-                bf.append(seq);
-                bf.newLine();
-            }
-            bf.flush();
-            bf.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-    }
+        public File TextAreaGet(TextArea textarea) {
+            String textHolder = textarea.getText().replaceAll("\n", System.getProperty("line.separator"));
+            File file = new File(textHolder);
+            File rename = new File("PastedContents");
+                rename.renameTo(file);
+            return file;
+        }
+    
     //Class for the second screen of the program
     /*
     public class DatabaseScreen extends Application {

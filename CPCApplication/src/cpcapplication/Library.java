@@ -29,12 +29,15 @@ public class  Library {
         
         //creats a file instance of the library and its path
         File file=new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
+        //File file=new File("C:\\Program Files (x86)\\CPCApplication\\Library");
         boolean exists = file.isDirectory();
         
         //if the library directory does not exist then create it else do nothing
         if (!exists){
             System.out.println("The Library does not exist");
-                  
+            
+            //Is this if statement supposed to create the database?
+            //All this does is print lines...
             if (file.mkdir()) {
                 System.out.println("Library was created!");
                  System.out.println("Library Path: C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
@@ -43,12 +46,12 @@ public class  Library {
             }
         }
         else{
-        System.out.println("The Library exist");
+        System.out.println("The Library exists");
         }
     }
     
     
-    private static void addAFile(File src) throws FileNotFoundException, IOException {
+    static void addAFile(File src) throws FileNotFoundException, IOException {
         
         //checks to see if the file that is being added to the Library directory exist
         if (src.exists()){
