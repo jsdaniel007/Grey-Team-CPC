@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,32 +7,31 @@
 package cpcapplication;
 /**
  *
- * @author kyle addy
+ * @author kyle addy and Taylor Perry
  * 
  */
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import static java.nio.file.StandardCopyOption.*;
 import java.io.File;
-import java.nio.file.Paths;
-
-
+import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 
 public class  Library {
-      public static void main(String[] args){
-         File test = new File("C:\\Users\\kyle addy\\Desktop\\test.txt");
-         
-         addAFile(test);
+      public static void main(String[] args) throws IOException{
+                    
     }
    
     Library() {//contructor
-        
+        // gets the username of the current user
         String username = System.getProperty("user.name");
         
+        //creats a file instance of the library and its path
         File file=new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
         boolean exists = file.isDirectory();
+        
+        //if the library directory does not exist then create it else do nothing
         if (!exists){
             System.out.println("The Library does not exist");
                   
@@ -48,17 +48,34 @@ public class  Library {
     }
     
     
-    public static void addAFile(File file){//****WIP****//
-        String username = System.getProperty("user.name");
+    private static void addAFile(File src) throws FileNotFoundException, IOException {
         
-       Path src = file.toPath();
-       Path dest = Paths.get("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
-       
-       try{
-       Files.copy(src, dest, REPLACE_EXISTING);
-       } catch (IOException e)
-       {
-           System.out.println("Failed to Copy file");
-       }
+        //checks to see if the file that is being added to the Library directory exist
+        if (src.exists()){
+            
+            //gets the username of the current user
+            String username = System.getProperty("user.name");
+            
+            //creats a file instance of the destination file
+            File dest=new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library\\" + src.getName());
+
+            //creates the file into the Library directory
+            dest.createNewFile();
+
+            //creates the options used for the copy
+            CopyOption[] options = new CopyOption[]{
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES
+            };
+            
+            //copy the contents of the file to the destination file in the Library directory
+             Files.copy(src.toPath(), dest.toPath(), options);
+             System.out.println("File: " +dest.getName() + " has been copied to the Library");
+        } else
+        {
+            System.out.println("File does not exist or path is bad");
+        }
+        
     }
 }
+
