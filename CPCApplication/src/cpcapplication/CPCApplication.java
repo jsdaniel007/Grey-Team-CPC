@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.FileInputStream; 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
@@ -42,9 +44,11 @@ import java.util.Iterator;
 public class CPCApplication extends Application {
     //these act as Member Variables
     private Label CompareTitleLabel;
-    File file1Selection;
-    File file2Selection;
-    File filePastedSelection;
+    File file1Selection; //Screen 1- File 1 file selection
+    File file2Selection; //Screen 1- File 2 file selection
+    File file3Selection; //Screen 2- File to add/rem to the Database
+    File filePastedSelection; //Paste Box File Converter
+    File filePastedSelection2; //Paste Box File Converter- Database page
     TextArea pastedCodeField, pastedCodeField2, pastedCodeField3;
     Scene CompScene, DataScene, ResultScene;
     VBox ResultScreen;
@@ -54,10 +58,9 @@ public class CPCApplication extends Application {
     
     //start of the Program from a GUI perspective
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
     //Allow access to your other classes
         CodeComparison CC = new CodeComparison();
-        CompareToLib CTL = new CompareToLib();
         Database DB = new Database();
         
     /*
@@ -249,10 +252,10 @@ public class CPCApplication extends Application {
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
-                   //DB.AddToLib(file1Selection);
+                   //DB.addAFile(file1Selection);
                }
                if (saveBox2.isSelected() == true) {
-                   //DB.AddToLib(file2Selection);
+                   //DB.addAFile(file2Selection);
                }
                
                primaryStage.setScene(ResultScene);
@@ -265,13 +268,15 @@ public class CPCApplication extends Application {
     //BOTTOM LEFT PANEL OF THE PROGRAM
         //Problem: LogoView will not show
         Label botLeftPanLabel = new Label("Plagiarism Checker");
-        Image Logo = new Image("file:Logo.PNG");
-            ImageView LogoView = new ImageView();
+        //FileInputStream inputstream = new FileInputStream("file:CPCApplication\\src\\cpcapplication\\Logo.png");
+        Image Logo = new Image("file:/CPCApplication/src/cpcapplication/Logo.PNG");
+            ImageView LogoView = new ImageView(Logo);
             LogoView.setImage(Logo);
             LogoView.setFitWidth(100);
-            LogoView.setPreserveRatio(true);
-            LogoView.setSmooth(true);
-            LogoView.setCache(true);
+            LogoView.setFitHeight(100);
+            //LogoView.setPreserveRatio(true);
+            //LogoView.setSmooth(true);
+            //LogoView.setCache(true);
         HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
         VBox botLeftPanVBox = new VBox(20, xDivider3, botLeftPanHBox, LogoView);
         
@@ -291,10 +296,10 @@ public class CPCApplication extends Application {
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
-                   //DB.AddToLib(file1Selection);
+                   //DB.addAFile(file1Selection);
                }
                if (saveBox3.isSelected() == true) {
-                   //DB.AddToLib(file3Selection);
+                   //DB.addAFile();
                }
                
                primaryStage.setScene(ResultScene);
@@ -324,47 +329,55 @@ public class CPCApplication extends Application {
         Button browseButton3 = new Button("Browse...");
         Label LeftColLabel2 = new Label("Choose Database Interaction: ");
             Label LeftColLabel3 = new Label("Choose Database Interaction: ");
-        Button File1DatabaseButton = new Button("Compare To The Database");
+        //Button File1DatabaseButton = new Button("Compare To The Database");
         Button AddToDatabase = new Button("Add To The Database");
         Button RemToDatabase = new Button("Remove From The Database");
         VBox LeftColVBox = new VBox(30, LeftColLabel, browseButton3, LeftColLabel2,
-                File1DatabaseButton, AddToDatabase, RemToDatabase);
+                /*File1DatabaseButton,*/ AddToDatabase, RemToDatabase);
         
     //LEFT COLUMN HANDLERS
         browseButton3.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
-                File file3Selection = file3Chooser.showOpenDialog(primaryStage);
+                file3Selection = file3Chooser.showOpenDialog(primaryStage);
                 String file3name = file3Selection.getName();
                 if (file3name != null) {
                     browseButton3.setText(file3name);
                 }
             }
         });
+        /*
         File1DatabaseButton.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //Use this to compare the passed in file to the database
                 //CTL.CompareToLib(file3name);
             }
         });
+        */
         AddToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //make it so that redundant files are detected
-                //DB.AddToLib(file3name);
+                //DB.addAFile(file3Selection);
             }
         });
         RemToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
-                //DB.RemToLib(file3name);
+                //DB.RemToLib(file3Selection);
             }
         });
         
         
     //RIGHT COLUMN ELEMENTS
         Label RightColLabel = new Label("Paste Text Below for Database Comparison");
-        Button PastedCompareButton = new Button("Compare Paste Contents to Database");
+        //Button PastedCompareButton = new Button("Compare Paste Contents to Database");
         Button AddPastedButton = new Button("Add Paste Contents to Database");
         VBox RightColVBox = new VBox(30, RightColLabel, pastedCodeField, LeftColLabel3, 
-                PastedCompareButton, AddPastedButton);
+                /*PastedCompareButton,*/ AddPastedButton);
+        //AddPastedButton Handler for TextArea File Conversion
+        AddPastedButton.setOnAction(new EventHandler<ActionEvent>( ) {
+                @Override public void handle(ActionEvent e) {
+                    //DB.addAFile();
+                }
+            });
         
         
     //adding elements to the Gridpane
