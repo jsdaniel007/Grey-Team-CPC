@@ -39,6 +39,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  *
@@ -174,27 +177,26 @@ public class CPCApplication extends Application {
         resultPaneC.setHgap(20);
         resultPaneC.setPadding(new Insets(10, 10, 10, 10));
         
-        TextArea file1CodeBoxA = new TextArea();
-            //file1CodeBoxA.setText(ResultFileText1);
+        TextArea file1CodeBoxA = new TextArea(ResultFileText1);
             file1CodeBoxA.setWrapText(true);
             file1CodeBoxA.setPrefHeight(200);
             file1CodeBoxA.setPrefColumnCount(2);
             file1CodeBoxA.setPrefWidth(80);
-        TextArea comparisonFileCodeBoxA = new TextArea();
+        TextArea comparisonFileCodeBoxA = new TextArea(ResultFileText2);           
             comparisonFileCodeBoxA.setWrapText(true);
             comparisonFileCodeBoxA.setPrefHeight(200);
             comparisonFileCodeBoxA.setPrefColumnCount(2);
             comparisonFileCodeBoxA.setPrefWidth(80);
         TextArea file1CodeBoxB = new TextArea();
-            file1CodeBoxA.setWrapText(true);
-            file1CodeBoxA.setPrefHeight(150);
-            file1CodeBoxA.setPrefColumnCount(2);
-            file1CodeBoxA.setPrefWidth(80);
+            file1CodeBoxB.setWrapText(true);
+            file1CodeBoxB.setPrefHeight(150);
+            file1CodeBoxB.setPrefColumnCount(2);
+            file1CodeBoxB.setPrefWidth(80);
         TextArea comparisonFileCodeBoxB = new TextArea();
-            comparisonFileCodeBoxA.setWrapText(true);
-            comparisonFileCodeBoxA.setPrefHeight(150);
-            comparisonFileCodeBoxA.setPrefColumnCount(2);
-            comparisonFileCodeBoxA.setPrefWidth(80);
+            comparisonFileCodeBoxB.setWrapText(true);
+            comparisonFileCodeBoxB.setPrefHeight(150);
+            comparisonFileCodeBoxB.setPrefColumnCount(2);
+            comparisonFileCodeBoxB.setPrefWidth(80);
     
     //NOTE: resultPaneB may need its own handlers, meaning new textArea's
         resultPaneA.add(file1CodeBoxA, 0, 0);
@@ -294,8 +296,16 @@ public class CPCApplication extends Application {
            @Override public void handle(ActionEvent e) {
                //runs the comparison function
                PercentageMatch = CC.Stage1(file1Selection, file2Selection);
-               ResultFileText1 = file2Selection.toString();
-               //resultFileText2 =
+               //get the text from the file into a string
+               try { ResultFileText1 = new String(Files.readAllBytes(Paths.get(file1Selection.toString())));
+               } catch (IOException ex) { Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               try { ResultFileText2 = new String(Files.readAllBytes(Paths.get(file2Selection.toString())));
+               } catch (IOException ex) {Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+               }
+               //Set the File Contents to the code boxes
+               file1CodeBoxA.setText(ResultFileText1);
+               comparisonFileCodeBoxA.setText(ResultFileText2);
                
                //if the save checkboxes are checked...
                if (saveBox.isSelected() == true) {
@@ -354,8 +364,19 @@ public class CPCApplication extends Application {
                if (pastedCodeField.getText().isEmpty() || PastedFileName.getText().isEmpty()) {
                    PastedCodeError.setVisible(true);
                } else {
+                   
                 File pastedCodeSelection = TextAreaGet(pastedCodeField);
                 PercentageMatch = CC.Stage1(file1Selection, pastedCodeSelection);
+                //Run a helper function to get the contents of the file from the path
+                    try { ResultFileText1 = new String(Files.readAllBytes(Paths.get(file1Selection.toString())));
+                    } catch (IOException ex) { Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    try { ResultFileText2 = new String(Files.readAllBytes(Paths.get(pastedCodeSelection.toString())));
+                    } catch (IOException ex) {Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+               //Set the File Contents to the code boxes
+               file1CodeBoxA.setText(ResultFileText1);
+               comparisonFileCodeBoxA.setText(ResultFileText2);
                
                 //if the save checkboxes are checked...
                 if (saveBox.isSelected() == true) {
@@ -505,6 +526,8 @@ public class CPCApplication extends Application {
                 rename.renameTo(file);
             return file;
         }
+        
+        
     
     //Class for the second screen of the program
     /*
