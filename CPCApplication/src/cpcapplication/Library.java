@@ -81,7 +81,7 @@ public class  Library {
         
     }
       
-     private static void remAFile(File file){
+     static void remAFile(File file){
         //gets the username of the current user
             String username = System.getProperty("user.name");
             
