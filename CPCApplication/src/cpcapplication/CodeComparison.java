@@ -55,7 +55,7 @@ public class CodeComparison {
                 lesserAmmount = linesTotalFile2; // Programs the Lesser to be related to F2
             }
                         
-            if (linesTotalFile1 != linesInCommon || linesTotalFile2 != 
+            if (linesTotalFile1 == linesInCommon || linesTotalFile2 == 
                     linesInCommon){ // If either file has been completely ripped off
                 areEqual = true;
             }
@@ -67,7 +67,6 @@ public class CodeComparison {
             System.out.println(" ");
             if(areEqual){
                 // System.out.println("The compared files are identical.");
-                percentageMatch = 100;
                 return percentageMatch; //Return the percentageMatch
             } else {
 //                System.out.println("The two files are not the same but have " + 
