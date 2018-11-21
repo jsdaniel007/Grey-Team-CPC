@@ -7,8 +7,8 @@ package cpcapplication;
 
 /**
  *
- * @author jsdan
- * @author cbell
+ * @author jsdan- High level Design
+ * @author cbell- High Level Design + Code Implementation
  */
   
 import java.io.BufferedReader;

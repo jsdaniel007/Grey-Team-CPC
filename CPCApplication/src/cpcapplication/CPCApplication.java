@@ -10,13 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.geometry.Pos;
-import java.io.File;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.FileInputStream; 
+import java.io.File; 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.geometry.Insets;
@@ -29,19 +24,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.scene.control.ContentDisplay;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+/*
+Ways to clean up the gui code, convert each screen into classes, and turning different
+features and actions into functions that can be called from the start function,
+seeing your start as a "main" of sorts, calling the functions as needed.
+For example, a handler is a great example of compressing code down,
+    SCREEN 1
+    -setupTitle()- sets up the "Title" section of Screen 1 "Comparisons"
+    -
+    
+*/
 
 /**
  *
@@ -65,6 +67,14 @@ public class CPCApplication extends Application {
     String ResultFileText1;
     String ResultFileText2;
     int PercentageMatch;
+    String PercentageMatchStr;
+    Label PercentageLabel;
+    //Label PercentageLabel2;
+    TextArea file1CodeBoxA;
+    TextArea comparisonFileCodeBoxA;
+    TextArea file1CodeBoxB;
+    GridPane resultPaneC;
+    HBox ButtonHBox;
     
     
     //start of the Program from a GUI perspective
@@ -75,7 +85,7 @@ public class CPCApplication extends Application {
         Library LIB = new Library();
         
     /*
-        SCREEN 1 GUI CODE
+        SCREEN 1 GUI CODE Pane Setup
     */  
     //Create a Gridpane to add panels to, for setting up the page.
         GridPane gridPane = new GridPane();
@@ -118,104 +128,8 @@ public class CPCApplication extends Application {
     //Create a VBox fo the TitleBox
         VBox CompTitleVBox = new VBox(10, ComparisonTitle, DataPageButton, gridPane);
         VBox DataTitleVBox = new VBox(10, DatabaseTitle, ComparisonPageButton, gridPane2);
-        
-        CompTitleVBox.setAlignment(Pos.TOP_CENTER);
-        DataTitleVBox.setAlignment(Pos.TOP_CENTER);
-    
-        
-    /*
-        RESULT SCREEN GUI CODE
-        Problem: Titles and Labels not centering correctly
-    */
-    //A
-        Label ResultTitle = new Label("Results");   
-        Label rCodeTitle = new Label("Raw Code Comparison"); 
-        Label File1Label = new Label("File 1 Code");
-        Label File2Label = new Label("File 2 Code");
-        HBox ATitle = new HBox(250, File1Label, File2Label);
-            ATitle.setAlignment(Pos.CENTER);
-        VBox rTitleBox = new VBox(20, ResultTitle, rCodeTitle, ATitle);
-            rTitleBox.setAlignment(Pos.CENTER);
-        GridPane resultPaneA = new GridPane(); //Will hold the TextArea's for the Raw Code Comparison
-    
-    //B -- Unsure if this is necessary
-        //Label cStyleTitle = new Label("Code Style Comparison");
-        //HBox rCenterTitle = new HBox(10, cStyleTitle);
-            //rCenterTitle.setAlignment(Pos.CENTER);
-        //GridPane resultPaneB = new GridPane();//Will hold the TextArea's for the Code Style Comparison
-    
-    //C 
-        Label PercentageLabel = new Label("Percentage Report: \n" + PercentageMatch);
-        Button retToHome = new Button("Make Another Comparison");     
-        HBox ButtonHBox = new HBox(250, retToHome);
-            ButtonHBox.setAlignment(Pos.CENTER);
-        HBox PercentageHBox = new HBox(250, PercentageLabel);
-            PercentageHBox.setAlignment(Pos.CENTER);
-        GridPane resultPaneC = new GridPane();
-    //HANDLERS
-        retToHome.setOnAction(new EventHandler<ActionEvent>( ) {
-            @Override public void handle(ActionEvent e) {
-                primaryStage.setScene(CompScene);
-                primaryStage.show();
-            }
-        });
-    
-    //Adding to the Gridpanes and formatting
-        resultPaneA.getColumnConstraints().addAll(leftColumn, rightColumn);
-        //resultPaneB.getColumnConstraints().addAll(leftColumn, rightColumn);
-        resultPaneC.getColumnConstraints().addAll(leftColumn, rightColumn);
-        
-        resultPaneA.setVgap(20);
-        resultPaneA.setHgap(20);
-        resultPaneA.setPadding(new Insets(10, 10, 10, 10));
-        
-        //resultPaneB.setVgap(20);
-        //resultPaneB.setHgap(20);
-        //resultPaneB.setPadding(new Insets(10, 10, 10, 10));
-        
-        resultPaneC.setVgap(20);
-        resultPaneC.setHgap(20);
-        resultPaneC.setPadding(new Insets(10, 10, 10, 10));
-        
-        TextArea file1CodeBoxA = new TextArea(ResultFileText1);
-            file1CodeBoxA.setWrapText(true);
-            file1CodeBoxA.setPrefHeight(200);
-            file1CodeBoxA.setPrefColumnCount(2);
-            file1CodeBoxA.setPrefWidth(80);
-        TextArea comparisonFileCodeBoxA = new TextArea(ResultFileText2);           
-            comparisonFileCodeBoxA.setWrapText(true);
-            comparisonFileCodeBoxA.setPrefHeight(200);
-            comparisonFileCodeBoxA.setPrefColumnCount(2);
-            comparisonFileCodeBoxA.setPrefWidth(80);
-        TextArea file1CodeBoxB = new TextArea();
-            file1CodeBoxB.setWrapText(true);
-            file1CodeBoxB.setPrefHeight(150);
-            file1CodeBoxB.setPrefColumnCount(2);
-            file1CodeBoxB.setPrefWidth(80);
-        TextArea comparisonFileCodeBoxB = new TextArea();
-            comparisonFileCodeBoxB.setWrapText(true);
-            comparisonFileCodeBoxB.setPrefHeight(150);
-            comparisonFileCodeBoxB.setPrefColumnCount(2);
-            comparisonFileCodeBoxB.setPrefWidth(80);
-    
-    //NOTE: resultPaneB may need its own handlers, meaning new textArea's
-        resultPaneA.add(file1CodeBoxA, 0, 0);
-        resultPaneA.add(comparisonFileCodeBoxA, 1, 0);
-        
-        //resultPaneB.add(file1CodeBoxB, 0, 0);
-        //resultPaneB.add(comparisonFileCodeBoxB, 1, 0);
-        
-        resultPaneC.add(PercentageHBox, 0, 0);
-        resultPaneC.add(ButtonHBox, 1,0);
-    
-    //Everything will be loaded into the VBox, even the footer
-        ResultScreen = new VBox(30, rTitleBox, resultPaneA, 
-            /*rCenterTitle, resultPaneB,*/ resultPaneC);
-    
-    //SCENES: Scene Handling
-        CompScene = new Scene(CompTitleVBox, 600, 650);
-        DataScene = new Scene(DataTitleVBox, 600, 650);
-        ResultScene = new Scene(ResultScreen, 600, 650);
+            CompTitleVBox.setAlignment(Pos.TOP_CENTER);
+            DataTitleVBox.setAlignment(Pos.TOP_CENTER);
         
     //REUSABLE GUI ELEMENTS
         Button browseButton1 = new Button("Browse...");
@@ -255,7 +169,9 @@ public class CPCApplication extends Application {
                 new ExtensionFilter("Java Files", ".java")
                 );
         
-            
+/*
+    SCREEN 1 CODE ===============================================
+*/
     //TOP LEFT PANEL ELEMENTS
         Label topLeftPanLabel = new Label("Choose File 1 Below to Upload");
         HBox topLeftPanHBox = new HBox(topLeftPanLabel);
@@ -263,7 +179,44 @@ public class CPCApplication extends Application {
         HBox SaveCheckHBox = new HBox(saveBox);
         VBox topLeftPanVBox = 
             new VBox(20, xDivider, topLeftPanHBox, BrowseButtonHBox, SaveCheckHBox);
-    //TOP LEFT PANEL HANDLERS
+        
+        
+    //TOP RIGHT PANEL ELEMENTS
+        Label topRightPanLabel = new Label("Choose File 2 Below to Upload");
+        HBox topRightPanHBox = new HBox(30, topRightPanLabel);
+        Button compareButton1 = new Button("Compare File 1 to File 2");
+        VBox topRightPanVBox = 
+            new VBox(20, xDivider2, topRightPanHBox, browseButton2, saveBox2, compareButton1);
+        
+    
+    //BOTTOM LEFT PANEL OF THE PROGRAM
+        //Problem: LogoView will not show
+        Label botLeftPanLabel = new Label("Plagiarism Checker");
+        Image Logo = new Image("file:C:\\CSCI_495\\Grey-Team-CPC\\CPCApplication\\src\\cpcapplication\\Pictures\\Logo.PNG");
+            ImageView LogoView = new ImageView(Logo);
+            LogoView.setImage(Logo);
+            LogoView.setFitWidth(250);
+            LogoView.setFitHeight(250);
+            LogoView.setPreserveRatio(true);
+            LogoView.setSmooth(true);
+            LogoView.setCache(true);
+        HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
+        VBox botLeftPanVBox = new VBox(20, xDivider3, botLeftPanHBox, LogoView);
+        
+        
+    //BOTTOM RIGHT PANEL OF THE PROGRAM
+        Label botRightPanLabel = new Label("Paste Code Below for File 1 Comparison");
+        TextField PastedFileName = new TextField();
+        Button compareButton2 = new Button("Compare File 1 to Pasted Code");
+        Label PastedCodeError = new Label("Name Your File:");
+            PastedCodeError.setTextFill(Color.web("#ff0000"));
+            PastedCodeError.setVisible(false);
+        HBox botRightPanHBox = new HBox(30, botRightPanLabel);
+        VBox botRightPanVBox = new VBox(20, xDivider4, botRightPanHBox, 
+                pastedCodeField, saveBox3, compareButton2, PastedCodeError);
+        
+    //SCENE 1 HANDLERS
+        //TOP LEFT PANEL HANDLERS
         browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //have the file chooser appear, then have the filename
@@ -275,14 +228,7 @@ public class CPCApplication extends Application {
             }
         });
         
-        
-    //TOP RIGHT PANEL ELEMENTS
-        Label topRightPanLabel = new Label("Choose File 2 Below to Upload");
-        HBox topRightPanHBox = new HBox(30, topRightPanLabel);
-        Button compareButton1 = new Button("Compare File 1 to File 2");
-        VBox topRightPanVBox = 
-            new VBox(20, xDivider2, topRightPanHBox, browseButton2, saveBox2, compareButton1);
-    //TOP RIGHT PANEL HANDLERS
+        //TOP RIGHT PANEL HANDLERS
         browseButton2.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 file2Selection = file2Chooser.showOpenDialog(primaryStage);
@@ -293,9 +239,17 @@ public class CPCApplication extends Application {
             }
         });
         compareButton1.setOnAction(new EventHandler<ActionEvent>( ) {
-           @Override public void handle(ActionEvent e) {
-               //runs the comparison function
-               PercentageMatch = CC.Stage1(file1Selection, file2Selection);
+           @Override 
+           public void handle(ActionEvent e) {
+               /*
+               Have the program check the pastedFileSelection to see if it has a
+               file, if file1Selection is not chosen, and if so, do not proceed
+               */
+               setPercentage(CodeComparison.Stage1(file1Selection, file2Selection)); 
+               System.out.println("Percentage Report: " + getPercentage());
+               
+               PercentageLabel.setText("Percentage Report: " + getPercentage());
+               
                //get the text from the file into a string
                try { ResultFileText1 = new String(Files.readAllBytes(Paths.get(file1Selection.toString())));
                } catch (IOException ex) { Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
@@ -323,50 +277,31 @@ public class CPCApplication extends Application {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
                }
-               
                primaryStage.setScene(ResultScene);
                primaryStage.show();
+               
            } 
         });
         
-                
-    //BOTTOM LEFT PANEL OF THE PROGRAM
-        //Problem: LogoView will not show
-        Label botLeftPanLabel = new Label("Plagiarism Checker");
-        //FileInputStream inputstream = new FileInputStream("file:CPCApplication\\src\\cpcapplication\\Logo.png");
-        Image Logo = new Image("file:C:\\CSCI_495\\Grey-Team-CPC\\CPCApplication\\src\\cpcapplication\\Pictures\\Logo.PNG");
-            ImageView LogoView = new ImageView(Logo);
-            LogoView.setImage(Logo);
-            LogoView.setFitWidth(250);
-            LogoView.setFitHeight(250);
-            LogoView.setPreserveRatio(true);
-            LogoView.setSmooth(true);
-            LogoView.setCache(true);
-        HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
-        VBox botLeftPanVBox = new VBox(20, xDivider3, botLeftPanHBox, LogoView);
-        
-        
-    //BOTTOM RIGHT PANEL OF THE PROGRAM
-        Label botRightPanLabel = new Label("Paste Code Below for File 1 Comparison");
-        TextField PastedFileName = new TextField();
-        Button compareButton2 = new Button("Compare File 1 to Pasted Code");
-        Label PastedCodeError = new Label("Name Your File:");
-            PastedCodeError.setTextFill(Color.web("#ff0000"));
-            PastedCodeError.setVisible(false);
-        HBox botRightPanHBox = new HBox(30, botRightPanLabel);
-        VBox botRightPanVBox = new VBox(20, xDivider4, botRightPanHBox, 
-                pastedCodeField, saveBox3, compareButton2, PastedCodeError);
-    //BOTTOM RIGHT PANEL HANDLERS
-        //This is specifically the comparison between the File 1 and Pasted Code
+        //BOTTOM RIGHT PANEL HANDLERS
         compareButton2.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override public void handle(ActionEvent e) {
                //converts the content of the TextArea, then runs that into the comparison
-               if (pastedCodeField.getText().isEmpty() || PastedFileName.getText().isEmpty()) {
+               
+               /*This should handle the file selection exception handling, such as
+               if the file 1 is not selected, the file 2 IS selected, or if the 
+               textArea is empty with nothing to save, DO NOT MOVE ON
+               */
+               if (pastedCodeField.getText().isEmpty() || PastedFileName.getText().isEmpty() ||
+                       file2Selection.exists()) {
                    PastedCodeError.setVisible(true);
                } else {
                    
                 File pastedCodeSelection = TextAreaGet(pastedCodeField);
-                PercentageMatch = CC.Stage1(file1Selection, pastedCodeSelection);
+                setPercentage(CC.Stage1(file1Selection, pastedCodeSelection));
+                
+                PercentageLabel.setText("Percentage Report: " + getPercentage());
+                
                 //Run a helper function to get the contents of the file from the path
                     try { ResultFileText1 = new String(Files.readAllBytes(Paths.get(file1Selection.toString())));
                     } catch (IOException ex) { Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
@@ -400,22 +335,21 @@ public class CPCApplication extends Application {
            } 
         });
         
-        
     //Adding the elements to the gridPane sections-- SCREEN 1
         gridPane.add(topLeftPanVBox, 0, 0);
         gridPane.add(topRightPanVBox, 1, 0);
         gridPane.add(botLeftPanVBox, 0, 1);
         gridPane.add(botRightPanVBox, 1, 1);
         
-    /*
-        SCREEN 2 GUI CODE ===============================================
-    */
+/*
+    SCREEN 2 GUI CODE ===============================================
+*/
         FileChooser file3Chooser = new FileChooser();
-            file3Chooser.setTitle("Select File");
-            file3Chooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Java Files", ".java"),
-                new ExtensionFilter("All Files", "*.*"));
+        file3Chooser.setTitle("Select File");
+        file3Chooser.getExtensionFilters().addAll(
+            new ExtensionFilter("Text Files", "*.txt"),
+            new ExtensionFilter("Java Files", ".java"),
+            new ExtensionFilter("All Files", "*.*"));
             
     //LEFT COLUMN SETUP
         Label LeftColLabel = new Label("Choose File to Compare Below");
@@ -426,8 +360,29 @@ public class CPCApplication extends Application {
         Button RemToDatabase = new Button("Remove From The Database");
         VBox LeftColVBox = new VBox(30, LeftColLabel, browseButton3, LeftColLabel2,
                 /*File1DatabaseButton,*/ AddToDatabase, RemToDatabase);
+
+        /*
+        File1DatabaseButton.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                //Use this to compare the passed in file to the database
+                //CTL.CompareToLib(file3name);
+            }
+        });
+        */
         
-    //LEFT COLUMN HANDLERS
+    //RIGHT COLUMN ELEMENTS
+        Label RightColLabel = new Label("Paste Text Below for Database Comparison");
+        Label RightColLabel2 = new Label("Name Your File Before Adding to The Database:");
+        Label PastedBoxError = new Label("Please Name Your Text Before Adding!");
+            PastedBoxError.setTextFill(Color.web("#ff0000"));
+            PastedBoxError.setVisible(false);
+        //Button PastedCompareButton = new Button("Compare Paste Contents to Database");
+        Button AddPastedButton = new Button("Add Paste Contents to Database");
+        TextField NamePasted = new TextField();
+        VBox RightColVBox = new VBox(20, RightColLabel, pastedCodeField2, RightColLabel2,  
+                /*PastedCompareButton,*/ NamePasted, AddPastedButton, PastedBoxError);
+        
+        //SCENE 2 HANDLERS
         browseButton3.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 file3Selection = file3Chooser.showOpenDialog(primaryStage);
@@ -437,14 +392,7 @@ public class CPCApplication extends Application {
                 }
             }
         });
-        /*
-        File1DatabaseButton.setOnAction(new EventHandler<ActionEvent>( ) {
-            @Override public void handle(ActionEvent e) {
-                //Use this to compare the passed in file to the database
-                //CTL.CompareToLib(file3name);
-            }
-        });
-        */
+    
         AddToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 try {
@@ -460,19 +408,7 @@ public class CPCApplication extends Application {
                 LIB.remAFile(file3Selection);
             }
         });
-        
-        
-    //RIGHT COLUMN ELEMENTS
-        Label RightColLabel = new Label("Paste Text Below for Database Comparison");
-        Label RightColLabel2 = new Label("Name Your File Before Adding to The Database:");
-        Label PastedBoxError = new Label("Please Name Your Text Before Adding!");
-            PastedBoxError.setTextFill(Color.web("#ff0000"));
-            PastedBoxError.setVisible(false);
-        //Button PastedCompareButton = new Button("Compare Paste Contents to Database");
-        Button AddPastedButton = new Button("Add Paste Contents to Database");
-        TextField NamePasted = new TextField();
-        VBox RightColVBox = new VBox(20, RightColLabel, pastedCodeField2, RightColLabel2,  
-                /*PastedCompareButton,*/ NamePasted, AddPastedButton, PastedBoxError);
+            
         //AddPastedButton Handler for TextArea File Conversion
         AddPastedButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
@@ -487,15 +423,108 @@ public class CPCApplication extends Application {
                     else {
                         PastedBoxError.setVisible(true);
                     }
-                    
                 }
             });
         
+    /*
+        RESULT SCREEN GUI CODE
+    */
+    //A
+        Label ResultTitle = new Label("Results");   
+        Label rCodeTitle = new Label("Raw Code Comparison"); 
+        Label File1Label = new Label("File 1 Code");
+        Label File2Label = new Label("File 2 Code");
+        HBox ATitle = new HBox(250, File1Label, File2Label);
+            ATitle.setAlignment(Pos.CENTER);
+        VBox rTitleBox = new VBox(20, ResultTitle, rCodeTitle, ATitle);
+            rTitleBox.setAlignment(Pos.CENTER);
+        GridPane resultPaneA = new GridPane(); //Will hold the TextArea's for the Raw Code Comparison
+    
+    //B -- Unsure if this is necessary
+        //Label cStyleTitle = new Label("Code Style Comparison");
+        //HBox rCenterTitle = new HBox(10, cStyleTitle);
+            //rCenterTitle.setAlignment(Pos.CENTER);
+        //GridPane resultPaneB = new GridPane();//Will hold the TextArea's for the Code Style Comparison
+    
+    //C 
+        //The PercenatageLabel will be updated once the event handlers are called
+        PercentageLabel = new Label();
+        Button retToHome = new Button("Make Another Comparison");     
+        ButtonHBox = new HBox(250, retToHome);
+            ButtonHBox.setAlignment(Pos.CENTER);
+        //Make the HBox global, call and use it in the compare 1 function, or set it in
+        //a method to just call it within the actual comparison handler
+        //and any reference to the PercentageHBox should be in the method
+        HBox PercentageHBox = new HBox(250, PercentageLabel);
+           PercentageHBox.setAlignment(Pos.CENTER);
+        resultPaneC = new GridPane();
         
+    
+    //Adding to the Gridpanes and formatting
+        resultPaneA.getColumnConstraints().addAll(leftColumn, rightColumn);
+        //resultPaneB.getColumnConstraints().addAll(leftColumn, rightColumn);
+        resultPaneC.getColumnConstraints().addAll(leftColumn, rightColumn);
+        
+        resultPaneA.setVgap(20);
+        resultPaneA.setHgap(20);
+        resultPaneA.setPadding(new Insets(10, 10, 10, 10));
+        
+        //resultPaneB.setVgap(20);
+        //resultPaneB.setHgap(20);
+        //resultPaneB.setPadding(new Insets(10, 10, 10, 10));
+        
+        resultPaneC.setVgap(20);
+        resultPaneC.setHgap(20);
+        resultPaneC.setPadding(new Insets(10, 10, 10, 10));
+        
+        file1CodeBoxA = new TextArea(ResultFileText1);
+            file1CodeBoxA.setWrapText(true);
+            file1CodeBoxA.setPrefHeight(200);
+            file1CodeBoxA.setPrefColumnCount(2);
+            file1CodeBoxA.setPrefWidth(80);
+        comparisonFileCodeBoxA = new TextArea(ResultFileText2);           
+            comparisonFileCodeBoxA.setWrapText(true);
+            comparisonFileCodeBoxA.setPrefHeight(200);
+            comparisonFileCodeBoxA.setPrefColumnCount(2);
+            comparisonFileCodeBoxA.setPrefWidth(80);
+        TextArea file1CodeBoxB = new TextArea();
+            file1CodeBoxB.setWrapText(true);
+            file1CodeBoxB.setPrefHeight(150);
+            file1CodeBoxB.setPrefColumnCount(2);
+            file1CodeBoxB.setPrefWidth(80);
+        TextArea comparisonFileCodeBoxB = new TextArea();
+            comparisonFileCodeBoxB.setWrapText(true);
+            comparisonFileCodeBoxB.setPrefHeight(150);
+            comparisonFileCodeBoxB.setPrefColumnCount(2);
+            comparisonFileCodeBoxB.setPrefWidth(80);
+    
+    //NOTE: resultPaneB may need its own handlers, meaning new textArea's
+        resultPaneA.add(file1CodeBoxA, 0, 0);
+        resultPaneA.add(comparisonFileCodeBoxA, 1, 0);
+        
+        //resultPaneB.add(file1CodeBoxB, 0, 0);
+        //resultPaneB.add(comparisonFileCodeBoxB, 1, 0);
+        
+        resultPaneC.add(PercentageHBox, 0, 0);
+        resultPaneC.add(ButtonHBox, 1,0);
+        
+    //Everything will be loaded into the VBox, even the footer
+        ResultScreen = new VBox(30, rTitleBox, resultPaneA, 
+            /*rCenterTitle, resultPaneB,*/ resultPaneC);
+    
+     
     //adding elements to the Gridpane
         gridPane2.add(LeftColVBox, 0,0);
         gridPane2.add(RightColVBox, 1,0);
         
+    
+    //RESULT SCREEN HANDLERS
+    retToHome.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                primaryStage.setScene(CompScene);
+                primaryStage.show();
+            }
+        });
         
     //DataPageButton Handler 
         DataPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
@@ -512,6 +541,11 @@ public class CPCApplication extends Application {
                 }
             }); 
         
+        //SCENES: Scene Handling
+        CompScene = new Scene(CompTitleVBox, 600, 650);
+        DataScene = new Scene(DataTitleVBox, 600, 650);
+        ResultScene = new Scene(ResultScreen, 600, 650);
+        
         primaryStage.setTitle("CPC Application");
         primaryStage.setScene(CompScene);
         primaryStage.show();
@@ -527,6 +561,27 @@ public class CPCApplication extends Application {
             return file;
         }
         
+//        public void setPercentageHBox() {
+//            HBox PercentageHBox = new HBox(250, PercentageLabel);
+//            PercentageHBox.setAlignment(Pos.CENTER);
+//            resultPaneC = new GridPane();
+//            resultPaneC.add(PercentageHBox, 0, 0);
+//            resultPaneC.add(ButtonHBox, 1,0);
+//            resultPaneC.setVgap(20);
+//            resultPaneC.setHgap(20);
+//            resultPaneC.setPadding(new Insets(10, 10, 10, 10));
+//            resultPaneC.getColumnConstraints().addAll(leftColumn, rightColumn);
+//            
+//        }
+        
+        public void setPercentage(int percentage) {
+            PercentageMatch = percentage;
+        }
+        
+        public String getPercentage() {
+            PercentageMatchStr = String.valueOf(PercentageMatch);
+            return PercentageMatchStr;
+        }
         
     
     //Class for the second screen of the program
