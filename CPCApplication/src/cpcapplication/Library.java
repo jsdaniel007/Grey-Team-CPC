@@ -37,7 +37,7 @@ public class  Library {
         if (!exists){
             System.out.println("The Library does not exist");
             
-            file.getParentFile().mkdirs();
+            file.getAbsoluteFile().mkdirs();
             if (exists) {
                 System.out.println("Library was created!");
             } else {
