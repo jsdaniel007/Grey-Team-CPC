@@ -49,8 +49,8 @@ public class CPCApplication extends Application {
     File file1Selection; //Screen 1- File 1 file selection
     File file2Selection; //Screen 1- File 2 file selection
     File file3Selection; //Screen 2- File to add/rem to the Database
-    File filePastedSelection; //Paste Box File Converter
-    File filePastedSelection2; //Paste Box File Converter- Database page
+    File pastedCodeSelection; //Paste Box File Converter
+    File pastedCodeSelection2; //Paste Box File Converter- Database page
     TextArea pastedCodeField, pastedCodeField2;
     Scene CompScene, DataScene, ResultScene;
     VBox ResultScreen;
@@ -58,8 +58,7 @@ public class CPCApplication extends Application {
     ColumnConstraints rightColumn;
     String file1name;
     String file2name;
-    String ResultFileText1;
-    String ResultFileText2;
+    String ResultFileText1, ResultFileText2, ResultFileText3;
     int PercentageMatch;
     String PercentageMatchStr;
     Label PercentageLabel;
@@ -186,6 +185,7 @@ public class CPCApplication extends Application {
     //BOTTOM LEFT PANEL OF THE PROGRAM
         //Problem: LogoView will not show
         Label botLeftPanLabel = new Label("Plagiarism Checker");
+        Button ClearAll = new Button("Clear All Fields");
         Image Logo = new Image("file:C:\\CSCI_495\\Grey-Team-CPC\\CPCApplication\\src\\cpcapplication\\Pictures\\Logo.PNG");
             ImageView LogoView = new ImageView(Logo);
             LogoView.setImage(Logo);
@@ -195,14 +195,14 @@ public class CPCApplication extends Application {
             LogoView.setSmooth(true);
             LogoView.setCache(true);
         HBox botLeftPanHBox = new HBox(30, botLeftPanLabel);
-        VBox botLeftPanVBox = new VBox(20, xDivider3, botLeftPanHBox, LogoView);
+        VBox botLeftPanVBox = new VBox(20, xDivider3, botLeftPanHBox, LogoView, ClearAll);
         
         
     //BOTTOM RIGHT PANEL OF THE PROGRAM
         Label botRightPanLabel = new Label("Paste Code Below for File 1 Comparison");
         TextField PastedFileName = new TextField();
         Button compareButton2 = new Button("Compare File 1 to Pasted Code");
-        Label PastedCodeError = new Label("Name Your File:");
+        Label PastedCodeError = new Label("Enter Your Text!");
             PastedCodeError.setTextFill(Color.web("#ff0000"));
             PastedCodeError.setVisible(false);
         HBox botRightPanHBox = new HBox(30, botRightPanLabel);
@@ -232,6 +232,20 @@ public class CPCApplication extends Application {
                 }
             }
         });
+        
+        ClearAll.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                browseButton1.setText("Browse...");
+                browseButton2.setText("Browse...");
+                file2Selection = null;
+                pastedCodeField.setText("");
+                pastedCodeSelection = null;
+                setPercentage(0);
+                file1CodeBoxA.setText("");
+                comparisonFileCodeBoxA.setText("");
+            }
+        });
+        
         compareButton1.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override 
            public void handle(ActionEvent e) {
@@ -286,29 +300,27 @@ public class CPCApplication extends Application {
                if the file 1 is not selected, the file 2 IS selected, or if the 
                textArea is empty with nothing to save, DO NOT MOVE ON
                */
-               if (pastedCodeField.getText().isEmpty() || PastedFileName.getText().isEmpty() ||
-                       file2Selection.exists()) {
+               pastedCodeSelection = TextAreaGet(pastedCodeField, "Unnamed");
+               
+               setPercentage(CodeComparison.Stage1(file1Selection, pastedCodeSelection)); 
+               System.out.println("Percentage Report: " + getPercentage());
+               
+               PercentageLabel.setText("Percentage Report: " + getPercentage());
+               
+               if (pastedCodeField.getText().isEmpty() || !file1Selection.exists() ) {
                    PastedCodeError.setVisible(true);
                } else {
-                
-                   //can't tell if this will work, but it likely won't since the 
-                   //path isn't given, just the text
-                File pastedCodeSelection = TextAreaGet(pastedCodeField, "fakename");
-                setPercentage(CC.Stage1(file1Selection, pastedCodeSelection));
-                
-                PercentageLabel.setText("Percentage Report: " + getPercentage());
-                
                 //Run a helper function to get the contents of the file from the path
                     try { ResultFileText1 = new String(Files.readAllBytes(Paths.get(file1Selection.toString())));
                     } catch (IOException ex) { Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    try { ResultFileText2 = new String(Files.readAllBytes(Paths.get(pastedCodeSelection.toString())));
+                    try { ResultFileText3 = new String(Files.readAllBytes(Paths.get(pastedCodeSelection.toString())));
                     } catch (IOException ex) {Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                     }
                //Set the File Contents to the code boxes
                //replace the reused items as new items 
                file1CodeBoxA.setText(ResultFileText1);
-               comparisonFileCodeBoxA.setText(ResultFileText2);
+               comparisonFileCodeBoxA.setText(ResultFileText3);
                
                 //if the save checkboxes are checked...
                 if (saveBox.isSelected() == true) {
@@ -326,9 +338,11 @@ public class CPCApplication extends Application {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
                 }
+                
+                primaryStage.setScene(ResultScene);
+                primaryStage.show();
                }
-               primaryStage.setScene(ResultScene);
-               primaryStage.show();
+               
            } 
         });
         
@@ -411,7 +425,7 @@ public class CPCApplication extends Application {
         AddPastedButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
                     File fileName = new File(NamePasted.getText());
-                    File pastedCodeSelection2 = TextAreaGet(pastedCodeField2, NamePasted.getText());
+                    pastedCodeSelection2 = TextAreaGet(pastedCodeField2, NamePasted.getText());
                     
                     //if either the TextArea or the NamePasted Field is empty, return an error label
                     if (pastedCodeField2.getText().isEmpty() || NamePasted.getText().isEmpty()) {
