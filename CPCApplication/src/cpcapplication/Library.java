@@ -7,14 +7,16 @@
 package cpcapplication;
 /**
  *
- * @author kyle addy and Taylor Perry
- * 
+ * @author kyle addy and Taylor Perry-- base code
+ * @author chris mcclure-- bug fixes
  */
 import java.io.*;
 import java.io.File;
+import java.io.File.*;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 
@@ -23,30 +25,26 @@ public class  Library {
                     
     }
    
-    Library() {//contructor
+    Library() throws IOException {//contructor
         // gets the username of the current user
         String username = System.getProperty("user.name");
         
-        //creats a file instance of the library and its path
+        //creates a file instance of the library and its path
         File file=new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
-        //File file=new File("C:\\Program Files (x86)\\CPCApplication\\Library");
         boolean exists = file.isDirectory();
         
         //if the library directory does not exist then create it else do nothing
         if (!exists){
             System.out.println("The Library does not exist");
             
-            //Is this if statement supposed to create the database?
-            //All this does is print lines...
-            if (file.mkdir()) {
+            file.getParentFile().mkdirs();
+            if (exists) {
                 System.out.println("Library was created!");
-                 System.out.println("Library Path: C:\\Users\\" + username +"\\Documents\\cpcapplication\\library");
             } else {
                 System.out.println("Failed to create the Library!");
             }
-        }
-        else{
-        System.out.println("The Library exists");
+        } else {
+            System.out.println("The Library exists");
         }
     }
     
@@ -86,13 +84,13 @@ public class  Library {
             String username = System.getProperty("user.name");
             
             //creats a file instance of the destination file
-            File libFile=new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library\\" + file.getName());
+            File libFile = new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library\\" + file.getName());
             
             //checks to see if the file exists in the Library
             if (libFile.exists())
             {
                 libFile.delete();
-                System.out.println("File in liberary with the name of " + file.getName() + " has been deleted from the library");
+                System.out.println("File in library with the name of " + file.getName() + " has been deleted from the library");
             }
             else {
                 System.out.println("There was no file with the name of " + file.getName() + " in the library");

@@ -8,24 +8,16 @@ package cpcapplication;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.geometry.Pos;
-import java.io.File; 
-import java.io.FileNotFoundException;
+import java.io.*; 
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.geometry.Insets;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.CheckBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.image.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +25,8 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
+import javafx.collections.ObservableList;
 
 /*
 Ways to clean up the gui code, convert each screen into classes, and turning different
@@ -79,7 +73,7 @@ public class CPCApplication extends Application {
     
     //start of the Program from a GUI perspective
     @Override
-    public void start(Stage primaryStage) throws FileNotFoundException {
+    public void start(Stage primaryStage) throws FileNotFoundException, IOException {
     //Allow access to your other classes
         CodeComparison CC = new CodeComparison();
         Library LIB = new Library();
@@ -296,8 +290,10 @@ public class CPCApplication extends Application {
                        file2Selection.exists()) {
                    PastedCodeError.setVisible(true);
                } else {
-                   
-                File pastedCodeSelection = TextAreaGet(pastedCodeField);
+                
+                   //can't tell if this will work, but it likely won't since the 
+                   //path isn't given, just the text
+                File pastedCodeSelection = TextAreaGet(pastedCodeField, "fakename");
                 setPercentage(CC.Stage1(file1Selection, pastedCodeSelection));
                 
                 PercentageLabel.setText("Percentage Report: " + getPercentage());
@@ -310,6 +306,7 @@ public class CPCApplication extends Application {
                     } catch (IOException ex) {Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                     }
                //Set the File Contents to the code boxes
+               //replace the reused items as new items 
                file1CodeBoxA.setText(ResultFileText1);
                comparisonFileCodeBoxA.setText(ResultFileText2);
                
@@ -396,7 +393,8 @@ public class CPCApplication extends Application {
         AddToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 try {
-                    //make it so that redundant files are detected?
+                    System.out.println("file3Selection: \n" + file3Selection);
+                    
                     LIB.addAFile(file3Selection);
                 } catch (IOException ex) {
                     Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
@@ -412,16 +410,25 @@ public class CPCApplication extends Application {
         //AddPastedButton Handler for TextArea File Conversion
         AddPastedButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
-                    File pastedCodeSelection = TextAreaGet(pastedCodeField2);
-                    if (pastedCodeField2.getText().isEmpty() && NamePasted.getText().isEmpty()) {
+                    File fileName = new File(NamePasted.getText());
+                    File pastedCodeSelection2 = TextAreaGet(pastedCodeField2, NamePasted.getText());
+                    
+                    //if either the TextArea or the NamePasted Field is empty, return an error label
+                    if (pastedCodeField2.getText().isEmpty() || NamePasted.getText().isEmpty()) {
+                        PastedBoxError.setVisible(true);
+                    } 
+                    else {
+                    //...otherwise add the file to the library with a default name
                         try {
-                            LIB.addAFile(pastedCodeSelection);
+                            //you should pass the file path
+                            LIB.addAFile(pastedCodeSelection2);
+                            System.out.println("pastedCodeSelection2 name: " + pastedCodeSelection2.getAbsolutePath());
+                            System.out.println("pcs2: " + pastedCodeSelection2);
+                            System.out.println("fileName: " + fileName);
+                            
                         } catch (IOException ex) {
                             Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } 
-                    else {
-                        PastedBoxError.setVisible(true);
                     }
                 }
             });
@@ -552,13 +559,32 @@ public class CPCApplication extends Application {
     }
     
     //HELPER METHOD FOR TEXT AREA 
-        public File TextAreaGet(TextArea textarea) {
-            String textHolder = textarea.getText().replaceAll("\n", System.getProperty("line.separator"));
-            File file = new File(textHolder);
-            //Windows should take care of any renaming conflicts
-            File rename = new File("PastedContents");
-                rename.renameTo(file);
-            return file;
+    //This will take the contents of the TextArea, save it to the pastedTempLoc filepath
+    //and return the file path
+        public File TextAreaGet(TextArea textarea, String name) {
+            String username = System.getProperty("user.name");
+            name += ".txt";
+            ObservableList<CharSequence> paragraph = textarea.getParagraphs();
+            Iterator<CharSequence>  iter = paragraph.iterator();
+            File filepath = new File("C:\\Users\\" + username +"\\Documents\\cpcapplication\\library\\" + name);
+            try
+            {
+                BufferedWriter bf = 
+                        new BufferedWriter(new FileWriter(filepath));
+                while(iter.hasNext())
+                {
+                    CharSequence seq = iter.next();
+                    bf.append(seq);
+                    bf.newLine();
+                }
+                bf.flush();
+                bf.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return filepath;
         }
         
 //        public void setPercentageHBox() {
