@@ -23,7 +23,7 @@ public class  Library {
                     
     }
    
-    Library() {//contructor
+    private static void mkLibrary() {
         // gets the username of the current user
         String username = System.getProperty("user.name");
         
@@ -52,6 +52,7 @@ public class  Library {
         
         //checks to see if the file that is being added to the Library directory exist
         if (src.exists()){
+              mkLibrary();
             
             //gets the username of the current user
             String username = System.getProperty("user.name");
@@ -79,6 +80,9 @@ public class  Library {
     }
       
      private static void remAFile(File file){
+           
+           mkLibrary();
+           
         //gets the username of the current user
             String username = System.getProperty("user.name");
             
