@@ -68,6 +68,8 @@ public class CPCApplication extends Application {
     TextArea file1CodeBoxB;
     GridPane resultPaneC;
     HBox ButtonHBox;
+    Label SavePercentConfirm1 = new Label();
+    Label SavePercentConfirm2 = new Label();
     
     
     //start of the Program from a GUI perspective
@@ -150,16 +152,16 @@ public class CPCApplication extends Application {
         FileChooser file1Chooser = new FileChooser();
             file1Chooser.setTitle("Select File 1");
             file1Chooser.getExtensionFilters().addAll(
-                new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Java Files", ".java"),
+                //new ExtensionFilter("Text Files", "*.txt"),
+                //new ExtensionFilter("Java Files", ".java"),
                 new ExtensionFilter("All Files", "*.*"));
         
         FileChooser file2Chooser = new FileChooser();
             file2Chooser.setTitle("Select File 2");
             file2Chooser.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
-                new ExtensionFilter("Text Files", "*.txt"),
-                new ExtensionFilter("Java Files", ".java")
+                new ExtensionFilter("All Files", "*.*")
+                //new ExtensionFilter("Text Files", "*.txt"),
+                //new ExtensionFilter("Java Files", ".java")
                 );
         
 /*
@@ -253,7 +255,7 @@ public class CPCApplication extends Application {
                Have the program check the pastedFileSelection to see if it has a
                file, if file1Selection is not chosen, and if so, do not proceed
                */
-               setPercentage(CodeComparison.Stage1(file1Selection, file2Selection)); 
+               setPercentage(CC.Stage1(file1Selection, file2Selection)); 
                System.out.println("Percentage Report: " + getPercentage());
                
                PercentageLabel.setText("Percentage Report: " + getPercentage());
@@ -274,6 +276,7 @@ public class CPCApplication extends Application {
                    //Used Netbeans Hint system, complained otherwise
                    try {
                        LIB.addAFile(file1Selection);
+                       SavePercentConfirm1.setText(file1name + " has been added to the database");
                    } catch (IOException ex) {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
@@ -281,6 +284,7 @@ public class CPCApplication extends Application {
                if (saveBox2.isSelected() == true) {
                    try {
                        LIB.addAFile(file2Selection);
+                       SavePercentConfirm2.setText(file2name + " has been added to the database");
                    } catch (IOException ex) {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
@@ -302,7 +306,7 @@ public class CPCApplication extends Application {
                */
                pastedCodeSelection = TextAreaGet(pastedCodeField, "Unnamed");
                
-               setPercentage(CodeComparison.Stage1(file1Selection, pastedCodeSelection)); 
+               setPercentage(CC.Stage1(file1Selection, pastedCodeSelection)); 
                System.out.println("Percentage Report: " + getPercentage());
                
                PercentageLabel.setText("Percentage Report: " + getPercentage());
@@ -326,6 +330,7 @@ public class CPCApplication extends Application {
                 if (saveBox.isSelected() == true) {
                    try {
                        LIB.addAFile(file1Selection);
+                       SavePercentConfirm1.setText(file1name + " has been added to the database");
                    } catch (IOException ex) {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
@@ -334,6 +339,7 @@ public class CPCApplication extends Application {
                    try {
                        //pass the pasted contents to the addAFile
                        LIB.addAFile(pastedCodeSelection);
+                       SavePercentConfirm2.setText(pastedCodeSelection.getName() + " has been added to the database");
                    } catch (IOException ex) {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
@@ -358,19 +364,21 @@ public class CPCApplication extends Application {
         FileChooser file3Chooser = new FileChooser();
         file3Chooser.setTitle("Select File");
         file3Chooser.getExtensionFilters().addAll(
-            new ExtensionFilter("Text Files", "*.txt"),
-            new ExtensionFilter("Java Files", ".java"),
+            //new ExtensionFilter("Text Files", "*.txt"),
+            //new ExtensionFilter("Java Files", ".java"),
             new ExtensionFilter("All Files", "*.*"));
             
     //LEFT COLUMN SETUP
         Label LeftColLabel = new Label("Choose File to Compare Below");
         Button browseButton3 = new Button("Browse...");
         Label LeftColLabel2 = new Label("Choose Database Interaction: ");
+        Label AddedConfirmationL = new Label(" ");
         //Button File1DatabaseButton = new Button("Compare To The Database");
         Button AddToDatabase = new Button("Add To The Database");
         Button RemToDatabase = new Button("Remove From The Database");
+        Button ClearAll2 = new Button("Clear All Fields");
         VBox LeftColVBox = new VBox(30, LeftColLabel, browseButton3, LeftColLabel2,
-                /*File1DatabaseButton,*/ AddToDatabase, RemToDatabase);
+                /*File1DatabaseButton,*/ AddToDatabase, RemToDatabase, ClearAll2, AddedConfirmationL);
 
         /*
         File1DatabaseButton.setOnAction(new EventHandler<ActionEvent>( ) {
@@ -382,16 +390,17 @@ public class CPCApplication extends Application {
         */
         
     //RIGHT COLUMN ELEMENTS
-        Label RightColLabel = new Label("Paste Text Below for Database Comparison");
+        Label RightColLabel = new Label("Paste Text Below for Database Addition");
         Label RightColLabel2 = new Label("Name Your File Before Adding to The Database:");
         Label PastedBoxError = new Label("Please Name Your Text Before Adding!");
             PastedBoxError.setTextFill(Color.web("#ff0000"));
             PastedBoxError.setVisible(false);
+        Label AddedConfirmationR = new Label(" ");
         //Button PastedCompareButton = new Button("Compare Paste Contents to Database");
         Button AddPastedButton = new Button("Add Paste Contents to Database");
         TextField NamePasted = new TextField();
         VBox RightColVBox = new VBox(20, RightColLabel, pastedCodeField2, RightColLabel2,  
-                /*PastedCompareButton,*/ NamePasted, AddPastedButton, PastedBoxError);
+                /*PastedCompareButton,*/ NamePasted, AddPastedButton, PastedBoxError, AddedConfirmationR);
         
         //SCENE 2 HANDLERS
         browseButton3.setOnAction(new EventHandler<ActionEvent>( ) {
@@ -407,9 +416,13 @@ public class CPCApplication extends Application {
         AddToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 try {
-                    System.out.println("file3Selection: \n" + file3Selection);
-                    
+                    if (file3Selection != null) {
+                    String file3name = file3Selection.getName();
                     LIB.addAFile(file3Selection);
+                    AddedConfirmationL.setText(file3name + " added!");
+                    } else {
+                        AddedConfirmationL.setText("No File Chosen!");
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -417,13 +430,32 @@ public class CPCApplication extends Application {
         });
         RemToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
+                if (file3Selection != null) {
                 LIB.remAFile(file3Selection);
+                String file3name = file3Selection.getName();
+                AddedConfirmationL.setText(file3name + " removed!");
+                } else {
+                    AddedConfirmationL.setText("No File Chosen!");
+                }
+            }
+        });
+        
+        ClearAll2.setOnAction(new EventHandler<ActionEvent>( ) {
+            @Override public void handle(ActionEvent e) {
+                file3Selection = null;
+                NamePasted.setText("");
+                AddedConfirmationL.setVisible(false);
+                AddedConfirmationR.setVisible(false);
+                pastedCodeField2.setText("");
+                NamePasted.setText("");
+                PastedBoxError.setVisible(false);
             }
         });
             
         //AddPastedButton Handler for TextArea File Conversion
         AddPastedButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
+                    PastedBoxError.setVisible(false);
                     File fileName = new File(NamePasted.getText());
                     pastedCodeSelection2 = TextAreaGet(pastedCodeField2, NamePasted.getText());
                     
@@ -470,7 +502,7 @@ public class CPCApplication extends Application {
     //C 
         //The PercenatageLabel will be updated once the event handlers are called
         PercentageLabel = new Label();
-        Button retToHome = new Button("Make Another Comparison");     
+        Button retToHome = new Button("Make Another Comparison");
         ButtonHBox = new HBox(250, retToHome);
             ButtonHBox.setAlignment(Pos.CENTER);
         //Make the HBox global, call and use it in the compare 1 function, or set it in
@@ -478,6 +510,7 @@ public class CPCApplication extends Application {
         //and any reference to the PercentageHBox should be in the method
         HBox PercentageHBox = new HBox(250, PercentageLabel);
            PercentageHBox.setAlignment(Pos.CENTER);
+        VBox PercentageVBox = new VBox(10, PercentageHBox, SavePercentConfirm1, SavePercentConfirm2);
         resultPaneC = new GridPane();
         
     
@@ -526,7 +559,7 @@ public class CPCApplication extends Application {
         //resultPaneB.add(file1CodeBoxB, 0, 0);
         //resultPaneB.add(comparisonFileCodeBoxB, 1, 0);
         
-        resultPaneC.add(PercentageHBox, 0, 0);
+        resultPaneC.add(PercentageVBox, 0, 0);
         resultPaneC.add(ButtonHBox, 1,0);
         
     //Everything will be loaded into the VBox, even the footer
