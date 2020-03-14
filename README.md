@@ -1,5 +1,9 @@
 # Grey-Team-CPC
 
+======== PROJECT BACKGROUND AND CONTEXT ========
+
+For our software development team simulation class CSCI-495, our Grey Team was asked to create a Code Plagiarism Checker, where we will take two text files and compare them to one another and return a percentage of how those two files are similar to one another, with additional features such as being able to save our application to a database as well as a multitude of other features as seen above, all while using the SDLC along with weekly meetings with our Professor Julie Henderson.
+
 ======== PROJECT SHOWCASE/SCREENSHOTS ========
 
 ![Screen 1 Display](readme_pics/Screen1_Display.PNG)
@@ -14,11 +18,6 @@ Screen 2 is a "Database" Page where we can select a file to either remove or add
 
 The results screen will show both files as text, and display a Percentage Report along with feedback over whether the files were added to our database
 
-
-
-======== PROJECT BACKGROUND AND CONTEXT ========
-
-For our software development team simulation class CSCI-495, our Grey Team was asked to create a Code Plagiarism Checker, where we will take two text files and compare them to one another and return a percentage of how those two files are similar to one another, with additional features such as being able to save our application to a database as well as a multitude of other features as seen above, all while using the SDLC along with weekly meetings with our Professor Julie Henderson.
 
 ======== GUI DESIGN ========
 
