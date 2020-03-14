@@ -1,6 +1,7 @@
 # Grey-Team-CPC-
 
 ======== PROJECT SHOWCASE/SCREENSHOTS ========
+
 [Screen 1 Display](readme_pics/Screen1_Display.PNG)
 
 Screen 1 is a File selection screen for selecting what files we want to compare for Plagiarism, with Java FileChoosers as the method of selection and a code section where a user could paste code directly. The Program also has options for saving to a "Database" (for this implementation we did not implement a full database, but saved files to the user's hard drive)
