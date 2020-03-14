@@ -6,9 +6,12 @@
 package cpcapplication;
 
 /**
- *
- * @author jsdan- High level Design
- * @author cbell- High Level Design + Code Implementation
+ * Github Contributers
+ * @author jsdaniel007 (Chris McClure)
+ * High level Design/Ideas Department
+ * 
+ * @author skippercab (Chris Bell)
+ * High Level Design + Code Implementation
  */
   
 import java.io.BufferedReader;

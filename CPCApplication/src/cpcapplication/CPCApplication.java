@@ -1,24 +1,29 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Senior Portfolio Entry
+ * Student Name: Chris McClure
+ * Program Name: Code Plagiarism Checker
+ * Creation Date: 
+ * Last Modified Date:
+ * CSCI Course: CSCI 495 Systems Analysis and Software Design
+ * Grade Received: 100%
+ * Comments regarding design:
+ * The GUI code below is divided up into 3 screens:
+ *   -Comparisons Page- staging area for comparing two files
+ *   -Database Page
+ *   -Results Page
+ * Note: the "database" referred to in our code is not a true database, but it 
+ * was left for room to expansions
+ * 
  */
 package cpcapplication;
 
+import java.io.*; 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import java.io.*; 
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.geometry.Insets;
-import javafx.scene.image.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
@@ -26,26 +31,38 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
-import javafx.collections.ObservableList;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
+import javafx.scene.image.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.Scene;
 
 /*
-Ways to clean up the gui code, convert each screen into classes, and turning different
-features and actions into functions that can be called from the start function,
-seeing your start as a "main" of sorts, calling the functions as needed.
-For example, a handler is a great example of compressing code down,
-    SCREEN 1
-    -setupTitle()- sets up the "Title" section of Screen 1 "Comparisons"
-    -
-    
+    --Grey Team Code Plagiarism Checker---
+    This program will allow the user to compare 2 code files, with the option of one
+    to be selected from a file browser, with the second file being from a file 
+    browser as well or a textarea that converts it into a file within the first 
+    page being dubbed the "comparisons page" in the program.
+    The second page, the "Database page" does not actually have a true Database 
+    such as SQL or the other options available, although this is a potential expansion 
+    for the future. Instead of a database, it actually makes a folder within the 
+    CPCApplication that will hold the files that are being saved.
+    The Results Screen will display both files chosen from the Comparisons Page 
+    and easily displays the results to the user. 
 */
 
 /**
- *
- * @author jsdan
+ * Github Contributers
+ * @author jsdaniel007 (Chris McClure)-- Main GUI Design Lead/Programmer
+ * @co-author skippercab (Chris Bell)-- GUI Designer/Ideas Department
+ * @co-author N/A (Frederick Jeffers)-- GUI Designer/Ideas Department/Graphic Design
+ * 
+ * 
  */
 public class CPCApplication extends Application {
     //these act as Member Variables
-    private Label CompareTitleLabel;
     File file1Selection; //Screen 1- File 1 file selection
     File file2Selection; //Screen 1- File 2 file selection
     File file3Selection; //Screen 2- File to add/rem to the Database
@@ -62,7 +79,6 @@ public class CPCApplication extends Application {
     int PercentageMatch;
     String PercentageMatchStr;
     Label PercentageLabel;
-    //Label PercentageLabel2;
     TextArea file1CodeBoxA;
     TextArea comparisonFileCodeBoxA;
     TextArea file1CodeBoxB;
@@ -72,17 +88,22 @@ public class CPCApplication extends Application {
     Label SavePercentConfirm2 = new Label();
     
     
-    //start of the Program from a GUI perspective
+    /*
+    *Initialize the program to show the primaryStage, that is the first initial
+    *screen, labeled "Comparisons" at the top of the screen
+    */
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException, IOException {
-    //Allow access to your other classes
+    //Allow access to your other class objects
         CodeComparison CC = new CodeComparison();
         Library LIB = new Library();
         
     /*
-        SCREEN 1 GUI CODE Pane Setup
-    */  
-    //Create a Gridpane to add panels to, for setting up the page.
+        SCREEN 1: Comparisons 
+        This screen is the staging area for the file selection for the two 
+        code files to be compared to each other
+    */
+    //GridPane to have the elements placed in for later
         GridPane gridPane = new GridPane();
         GridPane gridPane2 = new GridPane();
         
@@ -128,7 +149,7 @@ public class CPCApplication extends Application {
             CompTitleVBox.setAlignment(Pos.TOP_CENTER);
             DataTitleVBox.setAlignment(Pos.TOP_CENTER);
         
-    //REUSABLE GUI ELEMENTS
+    //GUI elements to be inserted into the GridPanes
         Button browseButton1 = new Button("Browse...");
         Button browseButton2 = new Button("Browse...");
         CheckBox saveBox = new CheckBox("Save to the Database");
@@ -138,7 +159,7 @@ public class CPCApplication extends Application {
         CheckBox saveBox3 = new CheckBox("Save to the Database");
             saveBox3.setVisible(true);
         
-    //TEXTAREA CREATION
+    //TextArea's to take the text contents from later
         pastedCodeField = new TextArea();
             pastedCodeField.setWrapText(true);
             pastedCodeField.setPrefHeight(100);
@@ -168,6 +189,10 @@ public class CPCApplication extends Application {
         
 /*
     SCREEN 1 CODE ===============================================
+        Top Left Pane: File 1 Upload
+        Top Right Pane: File 2 Upload
+        Bottom Left Pane: Logo and Clear Fields 
+        Bottom Right Pane: Pasted Code Field to act as File 2
 */
     //TOP LEFT PANEL ELEMENTS
         Label topLeftPanLabel = new Label("Choose File 1 Below to Upload");
@@ -187,10 +212,9 @@ public class CPCApplication extends Application {
         
     
     //BOTTOM LEFT PANEL OF THE PROGRAM
-        //Problem: LogoView will not show
         Label botLeftPanLabel = new Label("Plagiarism Checker");
         Button ClearAll = new Button("Clear All Fields");
-        Image Logo = new Image("file:C:\\CSCI_495\\Grey-Team-CPC\\CPCApplication\\src\\cpcapplication\\Pictures\\Logo.PNG");
+        Image Logo = new Image("file:Logo.PNG");
             ImageView LogoView = new ImageView(Logo);
             LogoView.setImage(Logo);
             LogoView.setFitWidth(250);
@@ -213,8 +237,9 @@ public class CPCApplication extends Application {
         VBox botRightPanVBox = new VBox(20, xDivider4, botRightPanHBox, 
                 pastedCodeField, saveBox3, compareButton2, PastedCodeError);
         
-    //SCENE 1 HANDLERS
+    //SCENE 1: COMPARISON SCREEN HANDLERS
         //TOP LEFT PANEL HANDLERS
+        //This handler allows the user to select File 1 in the top left pane
         browseButton1.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //have the file chooser appear, then have the filename
@@ -227,6 +252,7 @@ public class CPCApplication extends Application {
         });
         
         //TOP RIGHT PANEL HANDLERS
+        //This Handler allows the user to select File 2 in the top right pane
         browseButton2.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 file2Selection = file2Chooser.showOpenDialog(primaryStage);
@@ -237,6 +263,7 @@ public class CPCApplication extends Application {
             }
         });
         
+        //clears all the fields to default values
         ClearAll.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 browseButton1.setText("Browse...");
@@ -250,6 +277,10 @@ public class CPCApplication extends Application {
             }
         });
         
+        /*
+        Runs the comparison function, while also setting up the Results Screen
+        to print out the results of the comparison function
+        */
         compareButton1.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override 
            public void handle(ActionEvent e) {
@@ -277,6 +308,7 @@ public class CPCApplication extends Application {
                if (saveBox.isSelected() == true) {
                    //Used Netbeans Hint system, complained otherwise
                    try {
+                       //..add a file to the Library through the LIB object
                        LIB.addAFile(file1Selection);
                        SavePercentConfirm1.setText(file1name + " has been added to the database");
                    } catch (IOException ex) {
@@ -291,6 +323,7 @@ public class CPCApplication extends Application {
                        Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                    }
                }
+               //...show the result screen that we prepped prior
                primaryStage.setScene(ResultScene);
                primaryStage.show();
                
@@ -298,14 +331,18 @@ public class CPCApplication extends Application {
         });
         
         //BOTTOM RIGHT PANEL HANDLERS
+        /*
+        This handler is similar to the top right panel, with the major difference
+        being the TextArea acting as the File 2, regardless of whether the 
+        save toggle boxes were checked
+        */
         compareButton2.setOnAction(new EventHandler<ActionEvent>( ) {
            @Override public void handle(ActionEvent e) {
-               //converts the content of the TextArea, then runs that into the comparison
-               
                /*This should handle the file selection exception handling, such as
                if the file 1 is not selected, the file 2 IS selected, or if the 
                textArea is empty with nothing to save, DO NOT MOVE ON
                */
+               //converts the content of the TextArea, then runs that into the comparison
                pastedCodeSelection = TextAreaGet(pastedCodeField, "Unnamed");
                
                setPercentage(CC.Stage1(file1Selection, pastedCodeSelection)); 
@@ -323,8 +360,8 @@ public class CPCApplication extends Application {
                     try { ResultFileText3 = new String(Files.readAllBytes(Paths.get(pastedCodeSelection.toString())));
                     } catch (IOException ex) {Logger.getLogger(CPCApplication.class.getName()).log(Level.SEVERE, null, ex);
                     }
-               //Set the File Contents to the code boxes
-               //replace the reused items as new items 
+                    
+               //Set the File Contents to the code boxes andreplace the reused items as new items 
                file1CodeBoxA.setText(ResultFileText1);
                comparisonFileCodeBoxA.setText(ResultFileText3);
                
@@ -354,7 +391,7 @@ public class CPCApplication extends Application {
            } 
         });
         
-    //Adding the elements to the gridPane sections-- SCREEN 1
+    //Adding the elements to the gridPane sections for Screen 1 Comparisons Screen
         gridPane.add(topLeftPanVBox, 0, 0);
         gridPane.add(topRightPanVBox, 1, 0);
         gridPane.add(botLeftPanVBox, 0, 1);
@@ -362,6 +399,12 @@ public class CPCApplication extends Application {
         
 /*
     SCREEN 2 GUI CODE ===============================================
+    This code is for the "Database" screen, where the left column is used for 
+    selecting an individual file and saving that to our database, or even removing it
+    if desired. 
+    
+    The Left Column is used for copying and pasting a file to the TextArea so that
+    it can be saved with a name to our database
 */
         FileChooser file3Chooser = new FileChooser();
         file3Chooser.setTitle("Select File");
@@ -382,7 +425,7 @@ public class CPCApplication extends Application {
         VBox LeftColVBox = new VBox(30, LeftColLabel, browseButton3, LeftColLabel2,
                 /*File1DatabaseButton,*/ AddToDatabase, RemToDatabase, ClearAll2, AddedConfirmationL);
 
-        /*
+        /* CUT Feature-- Compare to the Database
         File1DatabaseButton.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 //Use this to compare the passed in file to the database
@@ -404,7 +447,8 @@ public class CPCApplication extends Application {
         VBox RightColVBox = new VBox(20, RightColLabel, pastedCodeField2, RightColLabel2,  
                 /*PastedCompareButton,*/ NamePasted, AddPastedButton, PastedBoxError, AddedConfirmationR);
         
-        //SCENE 2 HANDLERS
+        //SCENE 2 HANDLERS FOR DATABASE SCREEN
+        //Allows user to select a file to save to database
         browseButton3.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 file3Selection = file3Chooser.showOpenDialog(primaryStage);
@@ -414,7 +458,8 @@ public class CPCApplication extends Application {
                 }
             }
         });
-    
+        
+        //Allows the user to add a file and give feedback to it being saved
         AddToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 try {
@@ -430,6 +475,8 @@ public class CPCApplication extends Application {
                 }
             }
         });
+        
+        //similar to AddToDatabase, but it just removes the file
         RemToDatabase.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 if (file3Selection != null) {
@@ -442,6 +489,7 @@ public class CPCApplication extends Application {
             }
         });
         
+        //clears the fields to default vales
         ClearAll2.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 file3Selection = null;
@@ -454,7 +502,7 @@ public class CPCApplication extends Application {
             }
         });
             
-        //AddPastedButton Handler for TextArea File Conversion
+        //AddPastedButton Handler for TextArea File Conversion with name of new file
         AddPastedButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
                     PastedBoxError.setVisible(false);
@@ -483,6 +531,9 @@ public class CPCApplication extends Application {
         
     /*
         RESULT SCREEN GUI CODE
+        Dividing up into two columns, left and right, this shows the contents of
+        two files uploaded, notifying the user if the files were added to the 
+        database at this point.
     */
     //A
         Label ResultTitle = new Label("Results");   
@@ -575,6 +626,7 @@ public class CPCApplication extends Application {
         
     
     //RESULT SCREEN HANDLERS
+    //returns user to the Comparisons Screen
     retToHome.setOnAction(new EventHandler<ActionEvent>( ) {
             @Override public void handle(ActionEvent e) {
                 primaryStage.setScene(CompScene);
@@ -583,6 +635,7 @@ public class CPCApplication extends Application {
         });
         
     //DataPageButton Handler 
+        //switches to the database page with a button
         DataPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {
                     primaryStage.setScene(DataScene);
@@ -590,6 +643,7 @@ public class CPCApplication extends Application {
                 }
             });
     //ComparisonPageButton Handler
+        //switches the screen to the Comparisons Page
         ComparisonPageButton.setOnAction(new EventHandler<ActionEvent>( ) {
                 @Override public void handle(ActionEvent e) {   
                     primaryStage.setScene(CompScene);
@@ -597,7 +651,7 @@ public class CPCApplication extends Application {
                 }
             }); 
         
-        //SCENES: Scene Handling
+        //SCENES: Scene Handling and sizing
         CompScene = new Scene(CompTitleVBox, 600, 650);
         DataScene = new Scene(DataTitleVBox, 600, 650);
         ResultScene = new Scene(ResultScreen, 600, 650);
@@ -636,19 +690,6 @@ public class CPCApplication extends Application {
             return filepath;
         }
         
-//        public void setPercentageHBox() {
-//            HBox PercentageHBox = new HBox(250, PercentageLabel);
-//            PercentageHBox.setAlignment(Pos.CENTER);
-//            resultPaneC = new GridPane();
-//            resultPaneC.add(PercentageHBox, 0, 0);
-//            resultPaneC.add(ButtonHBox, 1,0);
-//            resultPaneC.setVgap(20);
-//            resultPaneC.setHgap(20);
-//            resultPaneC.setPadding(new Insets(10, 10, 10, 10));
-//            resultPaneC.getColumnConstraints().addAll(leftColumn, rightColumn);
-//            
-//        }
-        
         public void setPercentage(int percentage) {
             PercentageMatch = percentage;
         }
@@ -657,19 +698,6 @@ public class CPCApplication extends Application {
             PercentageMatchStr = String.valueOf(PercentageMatch);
             return PercentageMatchStr;
         }
-        
-    
-    //Class for the second screen of the program
-    /*
-    public class DatabaseScreen extends Application {
-        
-    }
-    
-    public class ResultScreen extends Application {
-        
-    }
-    */
-    
     
     /**
      * @param args the command line arguments
