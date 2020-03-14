@@ -2,15 +2,15 @@
 
 ======== PROJECT SHOWCASE/SCREENSHOTS ========
 
-[Screen 1 Display](readme_pics/Screen1_Display.PNG)
+![Screen 1 Display](readme_pics/Screen1_Display.PNG)
 
 Screen 1 is a File selection screen for selecting what files we want to compare for Plagiarism, with Java FileChoosers as the method of selection and a code section where a user could paste code directly. The Program also has options for saving to a "Database" (for this implementation we did not implement a full database, but saved files to the user's hard drive)
 
-[Screen 2 Display](readme_pics/Screen2_Display.PNG)
+![Screen 2 Display](readme_pics/Screen2_Display.PNG)
 
 Screen 2 is a "Database" Page where we can select a file to either remove or add to the database implementation, or to paste code for adding to the database without having to compare files together.
 
-[Results Screen Display](readme_pics/Results_Display.PNG)
+![Results Screen Display](readme_pics/Results_Display.PNG)
 
 The results screen will show both files as text, and display a Percentage Report along with feedback over whether the files were added to our database
 
