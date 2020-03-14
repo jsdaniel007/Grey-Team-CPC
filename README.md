@@ -36,10 +36,15 @@ Our program was a resounding success with Prof. Henderson being very impressed w
 
 Within our software development team, we had the following members with specific roles
 Project Manager/Trainer/QA Tester- Joy Hamby
+
 Technical Communicator/Trainer/QA Tester- Fred Jeffers
+
 JavaFX GUI Developer/Git Repo Manager & Quality Assurance- Chris McClure
+
 Backend Developer/Analyst/Technical Communicator- Chris Bell
+
 Additional Functions Developer/Tester- Kyle Addey
+
 Additional Functions Developer//Tester- Taylor Perry
 
 Throughout this process we had a variety of Documents including a Project Charter derived from our Project Proposal
