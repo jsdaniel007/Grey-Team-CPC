@@ -85,6 +85,7 @@ public class CPCApplication extends Application {
     //Create a Gridpane to add panels to, for setting up the page.
         GridPane gridPane = new GridPane();
         GridPane gridPane2 = new GridPane();
+        
         //gridPane padding and gap settings
         gridPane.setVgap(20);
         gridPane2.setVgap(20);
@@ -101,6 +102,7 @@ public class CPCApplication extends Application {
         Label xDivider2 = new Label("==========================");
         Label xDivider3 = new Label("==========================");
         Label xDivider4 = new Label("===========  OR  ===========");
+        
         //Constraints for the left and right columns
         leftColumn = new ColumnConstraints();
             leftColumn.setPercentWidth(100);

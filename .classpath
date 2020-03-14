@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="CPCApplication/lib/commons-io-2/src/main/java"/>
+	<classpathentry kind="src" path="CPCApplication/lib/commons-io-2/src/test/java"/>
+	<classpathentry kind="src" path="CPCApplication/src"/>
+	<classpathentry kind="lib" path="CPCApplication/dist/CPCApplication.jar"/>
+	<classpathentry kind="lib" path="CPCApplication/lib/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="CPCApplication/lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar"/>
+	<classpathentry kind="lib" path="CPCApplication/lib/junit_4/junit-4.12-javadoc.jar"/>
+	<classpathentry kind="lib" path="CPCApplication/lib/junit_4/junit-4.12-sources.jar"/>
+	<classpathentry kind="lib" path="CPCApplication/lib/junit_4/junit-4.12.jar"/>
+	<classpathentry kind="output" path="CPCApplication/build/classes"/>
+</classpath>
